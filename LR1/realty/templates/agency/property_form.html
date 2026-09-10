@@ -1,0 +1,14 @@
+{% extends "agency/base.html" %}
+
+{% block title %}Форма объекта{% endblock %}
+
+{% block content %}
+    <section>
+        <h2>Объект недвижимости</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Сохранить</button>
+        </form>
+    </section>
+{% endblock %}

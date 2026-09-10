@@ -1,0 +1,7 @@
+venv
+__pycache__
+*.pyc
+*.pyo
+.pytest_cache
+realty/db.sqlite3
+realty/logs

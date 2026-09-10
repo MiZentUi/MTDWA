@@ -1,0 +1,14 @@
+{% extends "agency/base.html" %}
+
+{% block title %}Регистрация{% endblock %}
+
+{% block content %}
+    <section>
+        <h2>Регистрация клиента</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Зарегистрироваться</button>
+        </form>
+    </section>
+{% endblock %}

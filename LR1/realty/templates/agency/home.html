@@ -1,0 +1,45 @@
+{% extends "agency/base.html" %}
+
+{% block title %}Главная{% endblock %}
+
+{% block content %}
+    <section>
+        <h2>Главная</h2>
+        {% if latest_article %}
+            <p><strong>Последняя опубликованная статья:</strong> {{ latest_article.title }}</p>
+            <p>{{ latest_article.summary }}</p>
+            <p><small>Дата публикации: {{ latest_article.published_at|date:"d/m/Y H:i" }}</small></p>
+        {% else %}
+            <p>Новости пока не опубликованы.</p>
+        {% endif %}
+    </section>
+
+    <section>
+        <h2>Показатели</h2>
+        <ul>
+            <li><strong>{{ total_properties }}</strong> объектов в базе</li>
+            <li><strong>{{ total_deals }}</strong> сделок в системе</li>
+            <li><strong>{{ employee_count }}</strong> сотрудников</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>Календарь и дата</h2>
+        <p>Дата для пользователя: {{ current_date_local }}</p>
+        <pre>{{ current_calendar }}</pre>
+    </section>
+
+    <section>
+        <h2>Подборка объектов</h2>
+        {% for property in featured_properties %}
+            <article>
+                <h3><a href="{% url 'realty:property-detail' property.slug %}">{{ property.title }}</a></h3>
+                <p>{{ property.city }}, {{ property.address }}</p>
+                <p>{{ property.get_deal_kind_display }} | {{ property.property_type.name }}</p>
+                <p><strong>{{ property.price }} BYN</strong></p>
+            </article>
+        {% empty %}
+            <p>Объекты пока не добавлены.</p>
+        {% endfor %}
+    </section>
+{% endblock %}

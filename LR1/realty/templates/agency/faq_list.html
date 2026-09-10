@@ -1,0 +1,20 @@
+{% extends "agency/base.html" %}
+
+{% block title %}Словарь терминов{% endblock %}
+
+{% block content %}
+    <section>
+        <h2>Словарь терминов и понятий</h2>
+        {% if entries %}
+            <dl>
+                {% for entry in entries %}
+                    <dt><strong>{{ entry.question }}</strong></dt>
+                    <dd>{{ entry.answer }}</dd>
+                    <dd><small>Добавлено: {{ entry.created_at|date:"d/m/Y H:i" }}</small></dd>
+                {% endfor %}
+            </dl>
+        {% else %}
+            <p>Записей пока нет.</p>
+        {% endif %}
+    </section>
+{% endblock %}

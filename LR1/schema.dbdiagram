@@ -1,0 +1,286 @@
+{
+  "version": "2.0.0",
+  "darkMode": true,
+  "gridEnabling": false,
+  "currentViewName": null,
+  "defaultView": {
+    "detailLevel": "All",
+    "tablePositions": [
+      {
+        "name": "auth_user",
+        "schemaName": "public",
+        "x": 539.82666015625,
+        "y": 521
+      },
+      {
+        "name": "agency_userprofile",
+        "schemaName": "public",
+        "x": 12,
+        "y": 560
+      },
+      {
+        "name": "agency_companyinfo",
+        "schemaName": "public",
+        "x": 648.19482421875,
+        "y": 12
+      },
+      {
+        "name": "agency_newsarticle",
+        "schemaName": "public",
+        "x": 979.39697265625,
+        "y": 12
+      },
+      {
+        "name": "agency_faqentry",
+        "schemaName": "public",
+        "x": 12,
+        "y": 12
+      },
+      {
+        "name": "agency_propertytype",
+        "schemaName": "public",
+        "x": 12,
+        "y": 1022
+      },
+      {
+        "name": "agency_amenity",
+        "schemaName": "public",
+        "x": 12,
+        "y": 418
+      },
+      {
+        "name": "agency_owner",
+        "schemaName": "public",
+        "x": 12,
+        "y": 1196
+      },
+      {
+        "name": "agency_property",
+        "schemaName": "public",
+        "x": 539.82666015625,
+        "y": 951
+      },
+      {
+        "name": "agency_property_agents",
+        "schemaName": "public",
+        "x": 1111.6826171875,
+        "y": 418
+      },
+      {
+        "name": "agency_property_amenities",
+        "schemaName": "public",
+        "x": 1111.6826171875,
+        "y": 592
+      },
+      {
+        "name": "agency_promocode",
+        "schemaName": "public",
+        "x": 12,
+        "y": 1466
+      },
+      {
+        "name": "agency_deal",
+        "schemaName": "public",
+        "x": 1111.6826171875,
+        "y": 766
+      },
+      {
+        "name": "agency_vacancy",
+        "schemaName": "public",
+        "x": 323.01025390625,
+        "y": 12
+      },
+      {
+        "name": "agency_review",
+        "schemaName": "public",
+        "x": 1111.6826171875,
+        "y": 1260
+      }
+    ],
+    "tableGroupCollapseStates": [],
+    "stickyNoteLayouts": [],
+    "referencePaths": [
+      {
+        "firstFieldNames": [
+          "user_id"
+        ],
+        "firstTableName": "agency_userprofile",
+        "firstSchemaName": "public",
+        "firstRelation": "1",
+        "secondFieldNames": [
+          "id"
+        ],
+        "secondTableName": "auth_user",
+        "secondSchemaName": "public",
+        "secondRelation": "1",
+        "checkPoints": []
+      },
+      {
+        "firstFieldNames": [
+          "property_type_id"
+        ],
+        "firstTableName": "agency_property",
+        "firstSchemaName": "public",
+        "firstRelation": "*",
+        "secondFieldNames": [
+          "id"
+        ],
+        "secondTableName": "agency_propertytype",
+        "secondSchemaName": "public",
+        "secondRelation": "1",
+        "checkPoints": []
+      },
+      {
+        "firstFieldNames": [
+          "owner_id"
+        ],
+        "firstTableName": "agency_property",
+        "firstSchemaName": "public",
+        "firstRelation": "*",
+        "secondFieldNames": [
+          "id"
+        ],
+        "secondTableName": "agency_owner",
+        "secondSchemaName": "public",
+        "secondRelation": "1",
+        "checkPoints": []
+      },
+      {
+        "firstFieldNames": [
+          "property_id"
+        ],
+        "firstTableName": "agency_property_agents",
+        "firstSchemaName": "public",
+        "firstRelation": "*",
+        "secondFieldNames": [
+          "id"
+        ],
+        "secondTableName": "agency_property",
+        "secondSchemaName": "public",
+        "secondRelation": "1",
+        "checkPoints": []
+      },
+      {
+        "firstFieldNames": [
+          "userprofile_id"
+        ],
+        "firstTableName": "agency_property_agents",
+        "firstSchemaName": "public",
+        "firstRelation": "*",
+        "secondFieldNames": [
+          "id"
+        ],
+        "secondTableName": "agency_userprofile",
+        "secondSchemaName": "public",
+        "secondRelation": "1",
+        "checkPoints": []
+      },
+      {
+        "firstFieldNames": [
+          "property_id"
+        ],
+        "firstTableName": "agency_property_amenities",
+        "firstSchemaName": "public",
+        "firstRelation": "*",
+        "secondFieldNames": [
+          "id"
+        ],
+        "secondTableName": "agency_property",
+        "secondSchemaName": "public",
+        "secondRelation": "1",
+        "checkPoints": []
+      },
+      {
+        "firstFieldNames": [
+          "amenity_id"
+        ],
+        "firstTableName": "agency_property_amenities",
+        "firstSchemaName": "public",
+        "firstRelation": "*",
+        "secondFieldNames": [
+          "id"
+        ],
+        "secondTableName": "agency_amenity",
+        "secondSchemaName": "public",
+        "secondRelation": "1",
+        "checkPoints": []
+      },
+      {
+        "firstFieldNames": [
+          "property_id"
+        ],
+        "firstTableName": "agency_deal",
+        "firstSchemaName": "public",
+        "firstRelation": "*",
+        "secondFieldNames": [
+          "id"
+        ],
+        "secondTableName": "agency_property",
+        "secondSchemaName": "public",
+        "secondRelation": "1",
+        "checkPoints": []
+      },
+      {
+        "firstFieldNames": [
+          "client_id"
+        ],
+        "firstTableName": "agency_deal",
+        "firstSchemaName": "public",
+        "firstRelation": "*",
+        "secondFieldNames": [
+          "id"
+        ],
+        "secondTableName": "agency_userprofile",
+        "secondSchemaName": "public",
+        "secondRelation": "1",
+        "checkPoints": []
+      },
+      {
+        "firstFieldNames": [
+          "manager_id"
+        ],
+        "firstTableName": "agency_deal",
+        "firstSchemaName": "public",
+        "firstRelation": "*",
+        "secondFieldNames": [
+          "id"
+        ],
+        "secondTableName": "agency_userprofile",
+        "secondSchemaName": "public",
+        "secondRelation": "1",
+        "checkPoints": []
+      },
+      {
+        "firstFieldNames": [
+          "promo_code_id"
+        ],
+        "firstTableName": "agency_deal",
+        "firstSchemaName": "public",
+        "firstRelation": "*",
+        "secondFieldNames": [
+          "id"
+        ],
+        "secondTableName": "agency_promocode",
+        "secondSchemaName": "public",
+        "secondRelation": "1",
+        "checkPoints": []
+      },
+      {
+        "firstFieldNames": [
+          "author_id"
+        ],
+        "firstTableName": "agency_review",
+        "firstSchemaName": "public",
+        "firstRelation": "*",
+        "secondFieldNames": [
+          "id"
+        ],
+        "secondTableName": "auth_user",
+        "secondSchemaName": "public",
+        "secondRelation": "1",
+        "checkPoints": []
+      }
+    ]
+  },
+  "views": {}
+}

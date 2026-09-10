@@ -1,0 +1,32 @@
+{% extends "agency/base.html" %}
+
+{% block title %}Промокоды{% endblock %}
+
+{% block content %}
+    <section>
+        <h2>Действующие промокоды</h2>
+        {% for promo in active_promos %}
+            <article>
+                <h3>{{ promo.code }}</h3>
+                <p>{{ promo.description }}</p>
+                <p>Скидка: {{ promo.discount_percent }}%</p>
+                <p><small>Период: {{ promo.starts_at|date:"d/m/Y" }} - {{ promo.ends_at|date:"d/m/Y" }}</small></p>
+            </article>
+        {% empty %}
+            <p>Активных промокодов нет.</p>
+        {% endfor %}
+    </section>
+
+    <section>
+        <h2>Архив</h2>
+        {% for promo in archived_promos %}
+            <article>
+                <h3>{{ promo.code }}</h3>
+                <p>{{ promo.description }}</p>
+                <p>Скидка: {{ promo.discount_percent }}%</p>
+            </article>
+        {% empty %}
+            <p>Архив пуст.</p>
+        {% endfor %}
+    </section>
+{% endblock %}

@@ -1,0 +1,85 @@
+{% extends "agency/base.html" %}
+
+{% block title %}Личный кабинет{% endblock %}
+
+{% block content %}
+    <section>
+        <h2>Личный кабинет</h2>
+        <section>
+            <h3>Профиль</h3>
+            <ul>
+                <li>{{ profile.full_name }}</li>
+                <li>Роль: {{ profile.get_role_display }}</li>
+                <li>Телефон: {{ profile.phone }}</li>
+                <li>Часовой пояс: {{ profile.timezone }}</li>
+            </ul>
+        </section>
+        <section>
+            <h3>Дата и время</h3>
+            <p>Для пользователя: {{ current_datetime_local|date:"d/m/Y H:i" }}</p>
+            <p>Для UTC: {{ current_datetime_utc|date:"d/m/Y H:i" }}</p>
+            <pre>{{ current_calendar }}</pre>
+        </section>
+        <section>
+            <h3>Курсы валют</h3>
+            {% if exchange_rates %}
+                {% for code, payload in exchange_rates.items %}
+                    <p>{{ code }}: {{ payload.rate }} BYN за {{ payload.scale }}</p>
+                {% endfor %}
+            {% else %}
+                <p>Валютные данные недоступны.</p>
+            {% endif %}
+        </section>
+        {% for error in api_errors %}
+            <p>{{ error }}</p>
+        {% endfor %}
+    </section>
+
+    <section>
+        <h2>Статистика по видам недвижимости</h2>
+        {% if property_type_chart_uri %}
+            <img src="{{ property_type_chart_uri|safe }}" alt="Диаграмма сделок по видам недвижимости">
+        {% else %}
+            <p>Пока нет данных для диаграммы.</p>
+        {% endif %}
+    </section>
+
+    <section>
+        <h2>Мои сделки</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Объект</th>
+                    <th>Статус</th>
+                    <th>Сумма</th>
+                    <th>Дата договора</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for deal in deals %}
+                    <tr>
+                        <td><a href="{% url 'realty:deal-detail' deal.pk %}">{{ deal.property.title }}</a></td>
+                        <td>{{ deal.get_status_display }}</td>
+                        <td>{{ deal.amount }} BYN</td>
+                        <td>{{ deal.agreement_date|date:"d/m/Y" }}</td>
+                    </tr>
+                {% empty %}
+                    <tr><td colspan="4">Сделок пока нет.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
+
+    <section>
+        <h2>Связанные объекты</h2>
+        {% for property in properties %}
+            <article>
+                <h3><a href="{% url 'realty:property-detail' property.slug %}">{{ property.title }}</a></h3>
+                <p>{{ property.city }}, {{ property.address }}</p>
+                <p>{{ property.price }} BYN</p>
+            </article>
+        {% empty %}
+            <p>Объектов пока нет.</p>
+        {% endfor %}
+    </section>
+{% endblock %}

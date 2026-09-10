@@ -1,0 +1,26 @@
+{% extends "agency/base.html" %}
+
+{% block title %}Отзывы{% endblock %}
+
+{% block content %}
+    <section>
+        <h2>Отзывы</h2>
+        <p>Публикуются отзывы зарегистрированных пользователей.</p>
+        {% if user.is_authenticated %}
+            <p><a href="{% url 'realty:review-add' %}">Добавить отзыв</a></p>
+        {% else %}
+            <p><a href="{% url 'login' %}">Войти, чтобы оставить отзыв</a></p>
+        {% endif %}
+
+        {% for review in reviews %}
+            <article>
+                <h3>{{ review.author.get_full_name|default:review.author.username }}</h3>
+                <p>Оценка: {{ review.rating }}/5</p>
+                <p>{{ review.text }}</p>
+                <p><small>Дата: {{ review.created_at|date:"d/m/Y H:i" }}</small></p>
+            </article>
+        {% empty %}
+            <p>Отзывов пока нет.</p>
+        {% endfor %}
+    </section>
+{% endblock %}

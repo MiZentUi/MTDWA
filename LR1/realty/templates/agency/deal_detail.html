@@ -1,0 +1,46 @@
+{% extends "agency/base.html" %}
+
+{% block title %}Сделка{% endblock %}
+
+{% block content %}
+    <section>
+        <h2>Сделка №{{ deal.pk }}</h2>
+        <p>{{ deal.property.title }}</p>
+        {% if user_profile and user_profile.is_employee %}
+            <p>
+                <a href="{% url 'realty:deal-edit' deal.pk %}">Редактировать</a>
+                <a href="{% url 'realty:deal-delete' deal.pk %}">Удалить</a>
+            </p>
+        {% endif %}
+    </section>
+
+    <section>
+        <h3>Основные данные</h3>
+        <ul>
+            <li>Клиент: {{ deal.client.full_name }}</li>
+            <li>Менеджер: {{ deal.manager.full_name }}</li>
+            <li>Статус: {{ deal.get_status_display }}</li>
+            <li>Сумма: {{ deal.amount }} BYN</li>
+            <li>Комиссия: {{ deal.commission_percent }}%</li>
+            <li>Итого с комиссией: {{ deal.total_with_commission }} BYN</li>
+            <li>Скидка по промокоду: {{ deal.discount_amount }} BYN</li>
+        </ul>
+    </section>
+
+    <section>
+        <h3>Даты</h3>
+        <ul>
+            <li>Договор: {{ deal.agreement_date|date:"d/m/Y" }}</li>
+            <li>Закрытие: {{ deal.closing_date|date:"d/m/Y"|default:"-" }}</li>
+            <li>Создано: {{ deal.created_at|date:"d/m/Y H:i" }}</li>
+            <li>Изменено: {{ deal.updated_at|date:"d/m/Y H:i" }}</li>
+        </ul>
+    </section>
+
+    {% if deal.notes %}
+        <section>
+            <h3>Примечание</h3>
+            <p>{{ deal.notes }}</p>
+        </section>
+    {% endif %}
+{% endblock %}

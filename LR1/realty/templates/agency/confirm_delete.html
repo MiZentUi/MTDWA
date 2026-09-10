@@ -1,0 +1,14 @@
+{% extends "agency/base.html" %}
+
+{% block title %}Удаление{% endblock %}
+
+{% block content %}
+    <section>
+        <h2>Подтверждение удаления</h2>
+        <p>Вы действительно хотите удалить запись?</p>
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit">Удалить</button>
+        </form>
+    </section>
+{% endblock %}

@@ -1,0 +1,89 @@
+{% extends "agency/base.html" %}
+
+{% block title %}Объекты недвижимости{% endblock %}
+
+{% block content %}
+    <section>
+        <h2>Каталог недвижимости</h2>
+        <p>Поиск, фильтрация и сортировка по параметрам.</p>
+        {% if user.is_authenticated and user_profile and user_profile.is_employee %}
+            <p><a href="{% url 'realty:property-add' %}">Добавить объект</a></p>
+        {% endif %}
+
+        <form method="get">
+            <fieldset>
+                <legend>Параметры поиска</legend>
+                <p>
+                    <label for="id_q">Поиск</label>
+                    <input id="id_q" type="text" name="q" value="{{ current_filters.q }}" placeholder="Название, город, адрес">
+                </p>
+                <p>
+                    <label for="id_property_type">Вид</label>
+                    <select id="id_property_type" name="property_type">
+                        <option value="">Все виды</option>
+                        {% for item in property_types %}
+                            <option value="{{ item.id }}" {% if current_filters.property_type == item.id|stringformat:"s" %}selected{% endif %}>{{ item.name }}</option>
+                        {% endfor %}
+                    </select>
+                </p>
+                <p>
+                    <label for="id_deal_kind">Операция</label>
+                    <select id="id_deal_kind" name="deal_kind">
+                        <option value="">Все</option>
+                        <option value="sale" {% if current_filters.deal_kind == "sale" %}selected{% endif %}>Продажа</option>
+                        <option value="rent" {% if current_filters.deal_kind == "rent" %}selected{% endif %}>Аренда</option>
+                    </select>
+                </p>
+                <p>
+                    <label for="id_sort">Сортировка</label>
+                    <select id="id_sort" name="sort">
+                        <option value="-published_at" {% if current_filters.sort == "-published_at" or not current_filters.sort %}selected{% endif %}>Сначала новые</option>
+                        <option value="price" {% if current_filters.sort == "price" %}selected{% endif %}>Цена по возрастанию</option>
+                        <option value="-price" {% if current_filters.sort == "-price" %}selected{% endif %}>Цена по убыванию</option>
+                        <option value="rooms" {% if current_filters.sort == "rooms" %}selected{% endif %}>Комнаты по возрастанию</option>
+                        <option value="-rooms" {% if current_filters.sort == "-rooms" %}selected{% endif %}>Комнаты по убыванию</option>
+                        <option value="area" {% if current_filters.sort == "area" %}selected{% endif %}>Площадь по возрастанию</option>
+                        <option value="-area" {% if current_filters.sort == "-area" %}selected{% endif %}>Площадь по убыванию</option>
+                    </select>
+                </p>
+                <p>
+                    <label for="id_min_price">Цена от</label>
+                    <input id="id_min_price" type="number" name="min_price" value="{{ current_filters.min_price }}">
+                </p>
+                <p>
+                    <label for="id_max_price">Цена до</label>
+                    <input id="id_max_price" type="number" name="max_price" value="{{ current_filters.max_price }}">
+                </p>
+                <p><button type="submit">Применить</button></p>
+            </fieldset>
+        </form>
+    </section>
+
+    <section>
+        <h2>Список объектов</h2>
+        {% for property in properties %}
+            <article>
+                <h3><a href="{% url 'realty:property-detail' property.slug %}">{{ property.title }}</a></h3>
+                <p>{{ property.city }}, {{ property.address }}</p>
+                <p>{{ property.property_type.name }} | {{ property.get_deal_kind_display }}</p>
+                <p>{{ property.rooms }} комн. | {{ property.area_sqm }} м²</p>
+                <p><strong>{{ property.price }} BYN</strong></p>
+                <p><small>Статус: {{ property.get_status_display }}</small></p>
+            </article>
+        {% empty %}
+            <p>По выбранным параметрам ничего не найдено.</p>
+        {% endfor %}
+    </section>
+
+    {% if is_paginated %}
+        <nav aria-label="Постраничная навигация">
+            {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}">Назад</a>
+            {% endif %}
+            <span>Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}</span>
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">Вперед</a>
+            {% endif %}
+        </nav>
+    {% endif %}
+{% endblock %}

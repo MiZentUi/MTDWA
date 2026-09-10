@@ -1,0 +1,179 @@
+// Public project/site name: realty
+// Internal Django app label remains agency to preserve migrations and DB table names.
+
+Table auth_user {
+  id integer [pk, increment]
+  username varchar [not null, unique]
+  first_name varchar
+  last_name varchar
+  email varchar
+  password varchar [not null]
+  is_superuser boolean [not null]
+  is_staff boolean [not null]
+  is_active boolean [not null]
+  date_joined timestamp
+  last_login timestamp
+}
+
+Table agency_userprofile {
+  id bigint [pk, increment]
+  user_id integer [not null, unique]
+  role varchar [not null, note: 'superuser | employee | client']
+  phone varchar [not null]
+  birth_date date [not null]
+  timezone varchar [not null]
+  photo_url varchar
+  position varchar
+  responsibilities text
+  bio text
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+}
+
+Table agency_companyinfo {
+  id bigint [pk, increment]
+  company_name varchar [not null]
+  slogan varchar
+  about_text text [not null]
+  history text
+  requisites text
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+}
+
+Table agency_newsarticle {
+  id bigint [pk, increment]
+  title varchar [not null]
+  summary varchar [not null]
+  body text [not null]
+  image_url varchar
+  published_at timestamp [not null]
+  is_published boolean [not null]
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+}
+
+Table agency_faqentry {
+  id bigint [pk, increment]
+  question varchar [not null]
+  answer text [not null]
+  created_at timestamp [not null]
+}
+
+Table agency_propertytype {
+  id bigint [pk, increment]
+  name varchar [not null, unique]
+  description text
+}
+
+Table agency_amenity {
+  id bigint [pk, increment]
+  name varchar [not null, unique]
+}
+
+Table agency_owner {
+  id bigint [pk, increment]
+  full_name varchar [not null]
+  phone varchar [not null]
+  email varchar [not null]
+  notes text
+  created_at timestamp [not null]
+}
+
+Table agency_property {
+  id bigint [pk, increment]
+  title varchar [not null]
+  slug varchar [not null, unique]
+  property_type_id bigint [not null]
+  owner_id bigint [not null]
+  deal_kind varchar [not null, note: 'sale | rent']
+  status varchar [not null, note: 'available | reserved | sold | rented']
+  city varchar [not null]
+  address varchar [not null]
+  description text [not null]
+  rooms smallint [not null]
+  area_sqm decimal(8,2) [not null]
+  price decimal(12,2) [not null]
+  published_at timestamp [not null]
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+}
+
+Table agency_property_agents {
+  id bigint [pk, increment]
+  property_id bigint [not null]
+  userprofile_id bigint [not null]
+
+  Indexes {
+    (property_id, userprofile_id) [unique]
+  }
+}
+
+Table agency_property_amenities {
+  id bigint [pk, increment]
+  property_id bigint [not null]
+  amenity_id bigint [not null]
+
+  Indexes {
+    (property_id, amenity_id) [unique]
+  }
+}
+
+Table agency_promocode {
+  id bigint [pk, increment]
+  code varchar [not null, unique]
+  description varchar [not null]
+  discount_percent smallint [not null]
+  starts_at date [not null]
+  ends_at date [not null]
+  created_at timestamp [not null]
+}
+
+Table agency_deal {
+  id bigint [pk, increment]
+  property_id bigint [not null]
+  client_id bigint [not null]
+  manager_id bigint [not null]
+  promo_code_id bigint
+  status varchar [not null, note: 'new | in_progress | closed | cancelled']
+  amount decimal(12,2) [not null]
+  commission_percent decimal(5,2) [not null]
+  agreement_date date [not null]
+  closing_date date
+  notes text
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+}
+
+Table agency_vacancy {
+  id bigint [pk, increment]
+  title varchar [not null]
+  description text [not null]
+  salary_from integer
+  salary_to integer
+  is_active boolean [not null]
+  published_at timestamp [not null]
+}
+
+Table agency_review {
+  id bigint [pk, increment]
+  author_id integer [not null]
+  rating smallint [not null]
+  text text [not null]
+  approved boolean [not null]
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+}
+
+Ref: agency_userprofile.user_id - auth_user.id
+Ref: agency_property.property_type_id > agency_propertytype.id
+Ref: agency_property.owner_id > agency_owner.id
+Ref: agency_property_agents.property_id > agency_property.id
+Ref: agency_property_agents.userprofile_id > agency_userprofile.id
+Ref: agency_property_amenities.property_id > agency_property.id
+Ref: agency_property_amenities.amenity_id > agency_amenity.id
+Ref: agency_deal.property_id > agency_property.id
+Ref: agency_deal.client_id > agency_userprofile.id
+Ref: agency_deal.manager_id > agency_userprofile.id
+Ref: agency_deal.promo_code_id > agency_promocode.id
+Ref: agency_review.author_id > auth_user.id

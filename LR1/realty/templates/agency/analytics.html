@@ -1,0 +1,46 @@
+{% extends "agency/base.html" %}
+
+{% block title %}Статистика{% endblock %}
+
+{% block content %}
+    <section>
+        <h2>Статистические показатели</h2>
+        <ul>
+            <li><strong>{{ total_amount }}</strong> общая сумма сделок</li>
+            <li><strong>{{ average_amount }}</strong> средняя сумма сделки</li>
+            <li><strong>{{ median_amount }}</strong> медиана по сумме</li>
+            <li><strong>{{ mode_amount }}</strong> мода по сумме</li>
+            <li><strong>{{ popular_type }}</strong> самый популярный вид</li>
+            <li><strong>{{ profitable_type }}</strong> самый прибыльный вид</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>Диаграмма по видам недвижимости</h2>
+        {% if property_type_chart_uri %}
+            <img src="{{ property_type_chart_uri|safe }}" alt="Диаграмма сделок по видам недвижимости">
+        {% else %}
+            <p>Пока нет данных для диаграммы.</p>
+        {% endif %}
+    </section>
+
+    <section>
+        <h2>Клиенты в алфавитном порядке</h2>
+        {% for client in alphabetical_clients %}
+            <article>
+                <p>{{ client.full_name }} | {{ client.phone }}</p>
+            </article>
+        {% empty %}
+            <p>Клиентов нет.</p>
+        {% endfor %}
+    </section>
+
+    <section>
+        <h2>Статусы сделок</h2>
+        {% for item in status_summary %}
+            <p>{{ item.status }}: {{ item.total }}</p>
+        {% empty %}
+            <p>Нет данных.</p>
+        {% endfor %}
+    </section>
+{% endblock %}

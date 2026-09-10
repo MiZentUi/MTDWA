@@ -1,0 +1,20 @@
+{% extends "agency/base.html" %}
+
+{% block title %}Контакты{% endblock %}
+
+{% block content %}
+    <section>
+        <h2>Контакты сотрудников</h2>
+        {% for employee in employees %}
+            <article>
+                <h3>{{ employee.full_name }}</h3>
+                <p><strong>{{ employee.position|default:"Сотрудник" }}</strong></p>
+                <p>{{ employee.responsibilities|default:"Консультирование клиентов и сопровождение сделок." }}</p>
+                <p>Телефон: {{ employee.phone }}</p>
+                <p>Email: {{ employee.user.email|default:"не указан" }}</p>
+            </article>
+        {% empty %}
+            <p>Сотрудники пока не добавлены.</p>
+        {% endfor %}
+    </section>
+{% endblock %}

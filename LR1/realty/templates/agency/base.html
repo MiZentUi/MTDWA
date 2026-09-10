@@ -1,0 +1,67 @@
+{% load agency_extras %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}realty{% endblock %}</title>
+</head>
+<body>
+    <header>
+        <h1>{{ company_info.company_name|default:"realty" }}</h1>
+        <p>{{ company_info.slogan|default:"Продажа и аренда объектов недвижимости" }}</p>
+
+        <nav aria-label="Основная навигация">
+            <ul>
+                <li><a href="{% url 'realty:home' %}">Главная</a></li>
+                <li><a href="{% url 'realty:about' %}">О компании</a></li>
+                <li><a href="{% url 'realty:news' %}">Новости</a></li>
+                <li><a href="{% url 'realty:faq' %}">Словарь</a></li>
+                <li><a href="{% url 'realty:contacts' %}">Контакты</a></li>
+                <li><a href="{% url 'realty:vacancies' %}">Вакансии</a></li>
+                <li><a href="{% url 'realty:reviews' %}">Отзывы</a></li>
+                <li><a href="{% url 'realty:promocodes' %}">Промокоды</a></li>
+                <li><a href="{% url 'realty:property-list' %}">Объекты</a></li>
+                <li><a href="{% url 'realty:privacy' %}">Политика</a></li>
+            </ul>
+        </nav>
+
+        <nav aria-label="Аккаунт">
+            <ul>
+                {% if user.is_authenticated %}
+                    <li><a href="{% url 'realty:dashboard' %}">Личный кабинет</a></li>
+                    <li><a href="{% url 'realty:deal-list' %}">Сделки</a></li>
+                    <li><a href="{% url 'realty:analytics' %}">Статистика</a></li>
+                    <li>
+                        <form method="post" action="{% url 'logout' %}">
+                            {% csrf_token %}
+                            <button type="submit">Выйти</button>
+                        </form>
+                    </li>
+                {% else %}
+                    <li><a href="{% url 'login' %}">Войти</a></li>
+                    <li><a href="{% url 'realty:register' %}">Регистрация</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+
+    {% if messages %}
+        <section aria-label="Сообщения">
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        </section>
+    {% endif %}
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <p>Часовой пояс пользователя: {{ user_timezone }}</p>
+        <p>Текущее время пользователя: {{ current_datetime_local|date:"d/m/Y H:i" }}</p>
+        <p>Текущее время UTC: {{ current_datetime_utc|date:"d/m/Y H:i" }}</p>
+    </footer>
+</body>
+</html>
