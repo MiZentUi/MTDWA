@@ -7,8 +7,8 @@ from django.contrib.auth import login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Avg, Count, Q, Sum
 from django.http import JsonResponse
-from django.shortcuts import redirect
-from django.urls import reverse_lazy
+from django.shortcuts import get_object_or_404, redirect
+from django.urls import reverse, reverse_lazy
 from django.views import View
 from django.views.generic import (
     CreateView,
@@ -20,12 +20,13 @@ from django.views.generic import (
 )
 
 from .charts import collect_property_type_stats, render_property_type_chart
-from .forms import DealForm, PropertyForm, ReviewForm, SignUpForm
+from .forms import DealForm, PaymentForm, PropertyForm, ReviewForm, SignUpForm
 from .mixins import EmployeeRequiredMixin, SiteContextMixin
 from .models import (
     Deal,
     FAQEntry,
     NewsArticle,
+    PartnerCompany,
     PromoCode,
     Property,
     PropertyType,
@@ -55,6 +56,12 @@ class HomeView(SiteContextMixin, TemplateView):
                 "total_properties": Property.objects.count(),
                 "total_deals": Deal.objects.count(),
                 "employee_count": employee_profiles_queryset().count(),
+                "partners": PartnerCompany.objects.all(),
+                "banner_images": [
+                    "agency/img/banner-1.svg",
+                    "agency/img/banner-2.svg",
+                    "agency/img/banner-3.svg",
+                ],
             }
         )
         return context
@@ -67,6 +74,12 @@ class AboutView(SiteContextMixin, TemplateView):
 class NewsListView(SiteContextMixin, ListView):
     template_name = "agency/news_list.html"
     context_object_name = "articles"
+    queryset = NewsArticle.objects.filter(is_published=True)
+
+
+class NewsDetailView(SiteContextMixin, DetailView):
+    template_name = "agency/news_detail.html"
+    context_object_name = "article"
     queryset = NewsArticle.objects.filter(is_published=True)
 
 
@@ -86,6 +99,10 @@ class ContactListView(SiteContextMixin, ListView):
 
 class PrivacyView(SiteContextMixin, TemplateView):
     template_name = "agency/privacy.html"
+
+
+class TestView(SiteContextMixin, TemplateView):
+    template_name = "agency/test.html"
 
 
 class VacancyListView(SiteContextMixin, ListView):
@@ -301,9 +318,21 @@ class PropertyDetailView(SiteContextMixin, DetailView):
                 "exchange_rates": exchange_rates,
                 "price_conversions": price_conversions,
                 "api_errors": api_errors,
+                "in_cart": str(property_obj.pk) in self.request.session.get("cart", {}),
             }
         )
         return context
+
+
+class PropertyCartAddView(View):
+    def post(self, request, slug, *args, **kwargs):
+        property_obj = get_object_or_404(Property, slug=slug)
+        cart = request.session.get("cart", {})
+        key = str(property_obj.pk)
+        cart[key] = cart.get(key, 0) + 1
+        request.session["cart"] = cart
+        messages.success(request, "Объект добавлен в корзину.")
+        return redirect("realty:cart")
 
 
 class PropertyCreateView(EmployeeRequiredMixin, SiteContextMixin, CreateView):
@@ -354,6 +383,108 @@ class PropertyDeleteView(EmployeeRequiredMixin, SiteContextMixin, DeleteView):
         logger.info("Property deleted by user=%s slug=%s", self.request.user.username, self.object.slug)
         messages.success(self.request, "Объект недвижимости удалён.")
         return super().form_valid(form)
+
+
+class CartView(SiteContextMixin, TemplateView):
+    template_name = "agency/cart.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        cart = self.request.session.get("cart", {})
+        property_ids = [int(pk) for pk in cart.keys()]
+        properties = Property.objects.filter(pk__in=property_ids).select_related("property_type", "owner")
+        items = []
+        total = Decimal("0.00")
+        for property_obj in properties:
+            quantity = int(cart.get(str(property_obj.pk), 0))
+            subtotal = property_obj.price * quantity
+            total += subtotal
+            items.append(
+                {
+                    "property": property_obj,
+                    "quantity": quantity,
+                    "subtotal": subtotal,
+                }
+            )
+        context.update({"cart_items": items, "cart_total": total})
+        return context
+
+
+class CartUpdateView(View):
+    def post(self, request, pk, *args, **kwargs):
+        get_object_or_404(Property, pk=pk)
+        action = request.POST.get("action")
+        cart = request.session.get("cart", {})
+        key = str(pk)
+        quantity = int(cart.get(key, 0))
+
+        if action == "increase":
+            cart[key] = quantity + 1 if quantity else 1
+        elif action == "decrease":
+            if quantity > 1:
+                cart[key] = quantity - 1
+            else:
+                cart.pop(key, None)
+        elif action == "remove":
+            cart.pop(key, None)
+
+        request.session["cart"] = cart
+        return redirect("realty:cart")
+
+
+class PaymentView(SiteContextMixin, TemplateView):
+    template_name = "agency/payment.html"
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.session.get("cart"):
+            messages.info(request, "Корзина пуста.")
+            return redirect("realty:cart")
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_form(self):
+        if self.request.method == "POST":
+            return PaymentForm(self.request.POST)
+        initial = {}
+        if self.request.user.is_authenticated:
+            initial["full_name"] = self.request.user.get_full_name() or self.request.user.username
+            initial["email"] = self.request.user.email
+            if hasattr(self.request.user, "profile"):
+                initial["phone"] = self.request.user.profile.phone
+        return PaymentForm(initial=initial)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        cart = self.request.session.get("cart", {})
+        property_ids = [int(pk) for pk in cart.keys()]
+        properties = Property.objects.filter(pk__in=property_ids)
+        total = Decimal("0.00")
+        items = []
+        for property_obj in properties:
+            quantity = int(cart.get(str(property_obj.pk), 0))
+            subtotal = property_obj.price * quantity
+            total += subtotal
+            items.append({"property": property_obj, "quantity": quantity, "subtotal": subtotal})
+        context.update(
+            {
+                "form": kwargs.get("form") or self.get_form(),
+                "cart_items": items,
+                "cart_total": total,
+                "payment_success": kwargs.get("payment_success", False),
+            }
+        )
+        return context
+
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+        if form.is_valid():
+            payment_data = {}
+            for key, value in form.cleaned_data.items():
+                payment_data[key] = value.isoformat() if hasattr(value, "isoformat") else value
+            request.session["last_payment"] = payment_data
+            request.session["cart"] = {}
+            messages.success(request, "Оплата оформлена.")
+            return self.render_to_response(self.get_context_data(payment_success=True, form=PaymentForm()))
+        return self.render_to_response(self.get_context_data(form=form))
 
 
 class DealListView(LoginRequiredMixin, SiteContextMixin, ListView):

@@ -5,40 +5,61 @@
 {% block content %}
     <section>
         <h2>Личный кабинет</h2>
-        <section>
+
+        <article>
             <h3>Профиль</h3>
-            <ul>
-                <li>{{ profile.full_name }}</li>
-                <li>Роль: {{ profile.get_role_display }}</li>
-                <li>Телефон: {{ profile.phone }}</li>
-                <li>Часовой пояс: {{ profile.timezone }}</li>
-            </ul>
-        </section>
+            <dl>
+                <dt>Пользователь</dt>
+                <dd>{{ profile.full_name }}</dd>
+                <dt>Роль</dt>
+                <dd>{{ profile.get_role_display }}</dd>
+                <dt>Телефон</dt>
+                <dd>{{ profile.phone }}</dd>
+                <dt>Часовой пояс</dt>
+                <dd>{{ profile.timezone }}</dd>
+            </dl>
+        </article>
+
         <section>
             <h3>Дата и время</h3>
-            <p>Для пользователя: {{ current_datetime_local|date:"d/m/Y H:i" }}</p>
-            <p>Для UTC: {{ current_datetime_utc|date:"d/m/Y H:i" }}</p>
+            <p>Для пользователя: <time datetime="{{ current_datetime_local|date:'c' }}">{{ current_datetime_local|date:"d/m/Y H:i" }}</time></p>
+            <p>Для UTC: <time datetime="{{ current_datetime_utc|date:'c' }}">{{ current_datetime_utc|date:"d/m/Y H:i" }}</time></p>
             <pre>{{ current_calendar }}</pre>
         </section>
+
         <section>
             <h3>Курсы валют</h3>
             {% if exchange_rates %}
-                {% for code, payload in exchange_rates.items %}
-                    <p>{{ code }}: {{ payload.rate }} BYN за {{ payload.scale }}</p>
-                {% endfor %}
+                <dl>
+                    {% for code, payload in exchange_rates.items %}
+                        <dt>{{ code }}</dt>
+                        <dd>{{ payload.rate }} BYN за {{ payload.scale }}</dd>
+                    {% endfor %}
+                </dl>
             {% else %}
                 <p>Валютные данные недоступны.</p>
             {% endif %}
         </section>
-        {% for error in api_errors %}
-            <p>{{ error }}</p>
-        {% endfor %}
+
+        {% if api_errors %}
+            <section>
+                <h3>Сообщения</h3>
+                <ul>
+                    {% for error in api_errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </section>
+        {% endif %}
     </section>
 
     <section>
         <h2>Статистика по видам недвижимости</h2>
         {% if property_type_chart_uri %}
-            <img src="{{ property_type_chart_uri|safe }}" alt="Диаграмма сделок по видам недвижимости">
+            <figure>
+                <img src="{{ property_type_chart_uri|safe }}" alt="Диаграмма сделок по видам недвижимости">
+                <figcaption>Распределение сделок по видам недвижимости.</figcaption>
+            </figure>
         {% else %}
             <p>Пока нет данных для диаграммы.</p>
         {% endif %}

@@ -112,6 +112,11 @@ class CompanyInfo(models.Model):
     about_text = models.TextField()
     history = models.TextField(blank=True)
     requisites = models.TextField(blank=True)
+    logo_path = models.CharField(max_length=255, blank=True)
+    certificate_html = models.TextField(blank=True)
+    video_url = models.URLField(blank=True)
+    audio_path = models.CharField(max_length=255, blank=True)
+    document_path = models.CharField(max_length=255, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -123,11 +128,28 @@ class CompanyInfo(models.Model):
         return self.company_name
 
 
+class PartnerCompany(models.Model):
+    name = models.CharField(max_length=255)
+    website_url = models.URLField()
+    logo_path = models.CharField(max_length=255)
+    description = models.CharField(max_length=255, blank=True)
+    sort_order = models.PositiveSmallIntegerField(default=0)
+
+    class Meta:
+        ordering = ("sort_order", "name")
+        verbose_name = "Компания-партнёр"
+        verbose_name_plural = "Компании-партнёры"
+
+    def __str__(self):
+        return self.name
+
+
 class NewsArticle(models.Model):
     title = models.CharField(max_length=200)
     summary = models.CharField(max_length=255)
     body = models.TextField()
     image_url = models.URLField(blank=True)
+    image_path = models.CharField(max_length=255, blank=True)
     published_at = models.DateTimeField(default=timezone.now)
     is_published = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -140,6 +162,9 @@ class NewsArticle(models.Model):
 
     def __str__(self):
         return self.title
+
+    def get_absolute_url(self):
+        return reverse("realty:news-detail", kwargs={"pk": self.pk})
 
 
 class FAQEntry(models.Model):

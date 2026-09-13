@@ -1,0 +1,33 @@
+{% extends "agency/base.html" %}
+
+{% block title %}Оплата{% endblock %}
+
+{% block content %}
+    <section>
+        <h2>Оплата товаров</h2>
+        {% if payment_success %}
+            <article>
+                <h3>Оплата оформлена</h3>
+                <p>Заказ отправлен на обработку. Менеджер свяжется с вами в указанное время.</p>
+            </article>
+        {% else %}
+            <section>
+                <h3>Состав заказа</h3>
+                <ul>
+                    {% for item in cart_items %}
+                        <li>{{ item.property.title }} — {{ item.quantity }} шт. — {{ item.subtotal }} BYN</li>
+                    {% endfor %}
+                </ul>
+                <p><strong>Итого:</strong> {{ cart_total }} BYN</p>
+            </section>
+            <form method="post">
+                {% csrf_token %}
+                <fieldset>
+                    <legend>Форма оплаты</legend>
+                    {{ form.as_p }}
+                </fieldset>
+                <p><button type="submit">Подтвердить оплату</button></p>
+            </form>
+        {% endif %}
+    </section>
+{% endblock %}

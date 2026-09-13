@@ -1,0 +1,159 @@
+{% extends "agency/base.html" %}
+{% load static %}
+
+{% block title %}Тестовая страница тегов{% endblock %}
+
+{% block content %}
+<article>
+    <header>
+        <h2>Демонстрация HTML-тегов</h2>
+        <p>Страница показывает теги из лекций: листинги, семантическое выделение, четверостишие с переносами, адаптивные
+            изображения, видео, таблицы с объединением ячеек и глобальные атрибуты.</p>
+    </header>
+
+    <section>
+        <h3>Семантическое и шрифтовое выделение текста</h3>
+        <p><b>Привлечение внимания</b> и <em>логическое ударение</em>, <i>иностранный термин realty</i>,
+            <u>неоднозначное подчёркивание</u>, <s>устаревшая цена 120 000 BYN</s>, <strong>важная информация</strong>.
+        </p>
+        <p>Индексы: H<sub>2</sub>O и площадь S<sup>2</sup>, мелкий шрифт <small>(оговорка и уточнение)</small>.</p>
+        <p><dfn title="объект недвижимости">Лот</dfn> — это единица предложения, выставленная на продажу.</p>
+        <p>Специалист сказал: <q cite="https://example.com/guide">Проверьте документы до подписания договора.</q></p>
+    </section>
+
+    <section>
+        <h3>Пример листинга</h3>
+        <figure>
+            <figcaption>Листинг 1. Подсчёт суммы сделки</figcaption>
+            <code>let total = price + fee;<wbr>
+commission = total * 0.03;<wbr>
+console.log("Итого: " + total);</code>
+        </figure>
+        <p>Переменная в примере — <var>total</var>. Результат работы программы: <samp>Итого: 103000 BYN</samp>. Ввод
+            пользователя: <kbd>Enter</kbd>.</p>
+    </section>
+
+    <section>
+        <h3>Четверостишие с фиксированным и потенциальным переносом строки</h3>
+        <p>У Лукоморья дуб зелёный,<br>
+            Златая цепь на дубе том:<br>
+            И днём и ночью кот учёный<br>
+            Всё ходит по цепи кругом.</p>
+        <p>Самое длинное слово: метоксихлор<wbr>диэтиламино<wbr>метил<wbr>бутил<wbr>амино<wbr>акридин.</p>
+    </section>
+
+    <section>
+        <h3>Адаптивные изображения</h3>
+        <picture>
+            <source media="(max-width: 600px)" srcset="{% static 'agency/img/banner-1.svg' %} 1x">
+            <source media="(max-width: 1200px)" srcset="{% static 'agency/img/banner-2.svg' %} 1x">
+            <img src="{% static 'agency/img/banner-3.svg' %}" alt="Адаптивный рекламный баннер" width="640">
+        </picture>
+    </section>
+
+    <section>
+        <h3>Видео и аудио</h3>
+        <video controls width="480" height="270" poster="{% static 'agency/img/bad_apple.png' %}">
+            <source src="{% static 'agency/media/bad_apple.mp4' %}" type="video/mp4">
+            Ваш браузер не поддерживает элемент video.
+        </video>
+        <audio controls preload="metadata">
+            <source src="{% static 'agency/media/bad_apple.mp3' %}" type="audio/mpeg">
+            Ваш браузер не поддерживает элемент audio.
+        </audio>
+    </section>
+
+    <section>
+        <h3>Таблица с объединением ячеек, заголовком и подвалом</h3>
+        <table border="1">
+            <caption>Плановые и фактические продажи по кварталам</caption>
+            <thead>
+                <tr>
+                    <th id="q">Квартал</th>
+                    <th id="plan">План</th>
+                    <th id="fact">Факт</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th id="q1" headers="q" scope="row">Q1</th>
+                    <td headers="plan q1">10</td>
+                    <td headers="fact q1">12</td>
+                </tr>
+                <tr>
+                    <th id="q2" headers="q" scope="row">Q2</th>
+                    <td headers="plan q2">15</td>
+                    <td headers="fact q2">14</td>
+                </tr>
+                <tr>
+                    <th id="q3" headers="q" scope="row">Q3</th>
+                    <td headers="plan q3">20</td>
+                    <td headers="fact q3">22</td>
+                </tr>
+                <tr>
+                    <th id="q4" headers="q" scope="row">Q4</th>
+                    <td headers="plan q4">25</td>
+                    <td headers="fact q4">30</td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th scope="row" colspan="2">Итого за год</th>
+                    <td headers="fact">78</td>
+                </tr>
+            </tfoot>
+        </table>
+        <p>Объединение по вертикали:</p>
+        <table border="1">
+            <caption>Статусы сделки</caption>
+            <tbody>
+                <tr>
+                    <th rowspan="2" scope="row">Этап 1</th>
+                    <td>Показ объекта</td>
+                </tr>
+                <tr>
+                    <td>Проверка документов</td>
+                </tr>
+                <tr>
+                    <th rowspan="2" scope="row">Этап 2</th>
+                    <td>Подписание договора</td>
+                </tr>
+                <tr>
+                    <td>Регистрация сделки</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <section>
+        <h3>Глобальные атрибуты</h3>
+        <p lang="ru" dir="ltr">Атрибуты <code>lang</code> и <code>dir</code> для направления текста.</p>
+        <p title="Всплывающая подсказка">Наведите курсор — сработает атрибут <code>title</code>.</p>
+        <p contenteditable="true" spellcheck="true">Этот абзац можно редактировать (<code>contenteditable</code> и
+            <code>spellcheck</code>).
+        </p>
+        <p tabindex="1">Фокус по порядку: первый элемент (<code>tabindex</code>).</p>
+        <p tabindex="2">Фокус: второй элемент.</p>
+        <p><a href="https://example.com" accesskey="e" draggable="true">Ссылка с <code>accesskey</code> (Alt+E) и
+                <code>draggable</code></a></p>
+        <p data-code="TEST-001" hidden>Этот абзац скрыт атрибутом <code>hidden</code>.</p>
+        <p data-category="demo" data-priority="high">Данные через пользовательские атрибуты <code>data-*</code>.</p>
+    </section>
+
+    <section>
+        <h3>Примеры семантического оформления</h3>
+        <p><abbr title="HyperText Markup Language">HTML</abbr> и <abbr title="Search Engine Optimization">SEO</abbr>
+            применяются для структуры и метаданных.</p>
+        <dl>
+            <dt>MLS</dt>
+            <dd>Каталог объектов недвижимости.</dd>
+            <dt>Lead</dt>
+            <dd>Потенциальный клиент агентства.</dd>
+        </dl>
+        <pre>Дом у парка,
+Свет в окне и тихий двор,
+Ключ в ладони,
+Сделка скоро станет явью.</pre>
+    </section>
+</article>
+{% endblock %}

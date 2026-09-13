@@ -7,8 +7,11 @@
         <h2>Сделка</h2>
         <form method="post">
             {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit">Сохранить</button>
+            <fieldset>
+                <legend>Форма сделки</legend>
+                {{ form.as_p }}
+            </fieldset>
+            <p><button type="submit">Сохранить</button></p>
         </form>
     </section>
 {% endblock %}

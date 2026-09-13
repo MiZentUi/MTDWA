@@ -12,6 +12,7 @@ from agency.models import (
     FAQEntry,
     NewsArticle,
     Owner,
+    PartnerCompany,
     PromoCode,
     Property,
     PropertyType,
@@ -35,10 +36,51 @@ class Command(BaseCommand):
                     "Агентство помогает подбирать квартиры, дома и коммерческие объекты, "
                     "сопровождает сделки и консультирует по рынку недвижимости."
                 ),
-                "history": "2018 - запуск компании\n2021 - открытие отдела аренды\n2024 - рост в сегменте новостроек",
-                "requisites": "УНП 123456789\nг. Минск, ул. Советская, 10",
+                "history": (
+                    "2018 — запуск компании\n"
+                    "2020 — первая база партнерских новостроек\n"
+                    "2022 — запуск дистанционных консультаций\n"
+                    "2024 — расширение каталога коммерческой недвижимости"
+                ),
+                "requisites": (
+                    "ООО «realty»\n"
+                    "УНП 123456789\n"
+                    "р/с BY00REAL00000000000000000000\n"
+                    "Адрес: г. Минск, ул. Демонстрационная, 10"
+                ),
+                "logo_path": "agency/img/logo.jpg",
+                "certificate_html": (
+                    "<section>"
+                    "<h4>Сертификат партнёра</h4>"
+                    "<p><strong>Настоящим подтверждается</strong>, что агентство <em>realty</em> "
+                    "в 2026 году прошло внутреннюю аттестацию по сопровождению сделок с недвижимостью.</p>"
+                    "<p>Сфера действия: консультации, проверка документов, сопровождение договоров.</p>"
+                    "<p>Номер сертификата: CERT-2026-001.</p>"
+                    "</section>"
+                ),
+                "video_url": "https://www.youtube.com/embed/dQw4w9WgXcQ",
+                "audio_path": "agency/media/company-audio.mp3",
+                "document_path": "agency/docs/company-profile.txt",
             },
         )
+
+        for idx, (name, url, description) in enumerate(
+            (
+                ("DomMarket", "https://example.com/dommarket", "Партнёр по городским новостройкам."),
+                ("OfficeHub", "https://example.com/officehub", "Партнёр по коммерческой недвижимости."),
+                ("RentLine", "https://example.com/rentline", "Партнёр по краткосрочной аренде."),
+            ),
+            start=1,
+        ):
+            PartnerCompany.objects.update_or_create(
+                name=name,
+                defaults={
+                    "website_url": url,
+                    "logo_path": f"agency/img/partner-{idx}.svg",
+                    "description": description,
+                    "sort_order": idx,
+                },
+            )
 
         property_types = {}
         for name, description in (
@@ -141,7 +183,10 @@ class Command(BaseCommand):
                     "owner": owners[idx % len(owners)],
                     "deal_kind": Property.DEAL_SALE if idx % 2 == 0 else Property.DEAL_RENT,
                     "status": Property.STATUS_AVAILABLE,
-                    "description": "Ухоженный объект с развитой инфраструктурой и удобной логистикой.",
+                    "description": (
+                        "Ухоженный объект с развитой инфраструктурой, удобной логистикой и "
+                        "возможностью быстрого выхода на сделку."
+                    ),
                     "rooms": 1 + idx % 4,
                     "area_sqm": Decimal("42.50") + idx * Decimal("6.10"),
                     "price": Decimal("85000.00") + idx * Decimal("12500.00"),
@@ -225,8 +270,12 @@ class Command(BaseCommand):
             NewsArticle.objects.get_or_create(
                 title=f"Новость {idx}",
                 defaults={
-                    "summary": f"Краткое описание новости {idx}.",
-                    "body": "Подробная статья о рынке недвижимости, ценах и спросе.",
+                    "summary": f"Краткое описание новости {idx} в одно предложение.",
+                    "body": (
+                        "Подробная статья о рынке недвижимости, ценах, спросе, юридических нюансах "
+                        "и практических советах для клиентов агентства."
+                    ),
+                    "image_path": f"agency/img/news-{idx}.svg",
                     "published_at": timezone.now() - timedelta(days=idx),
                 },
             )
@@ -304,10 +353,11 @@ class Command(BaseCommand):
 
         profile = user.profile
         profile.role = role
-        profile.phone = "+375 (29) 555-00-11" if username.endswith("1") else "+375 (29) 555-00-22"
+        profile.phone = "+375 (29) 111-11-11" if username.endswith("1") else "+375 (29) 222-22-22"
         profile.birth_date = date(1990, 1, 1)
         profile.position = position
         profile.responsibilities = responsibilities
         profile.bio = "Демо-профиль для лабораторной работы."
+        profile.photo_url = ""
         profile.save()
         return user

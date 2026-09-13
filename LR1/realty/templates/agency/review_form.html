@@ -7,8 +7,11 @@
         <h2>Новый отзыв</h2>
         <form method="post">
             {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit">Отправить</button>
+            <fieldset>
+                <legend>Форма отзыва</legend>
+                {{ form.as_p }}
+            </fieldset>
+            <p><button type="submit">Отправить</button></p>
         </form>
     </section>
 {% endblock %}

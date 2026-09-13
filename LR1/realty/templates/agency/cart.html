@@ -1,0 +1,49 @@
+{% extends "agency/base.html" %}
+{% load static %}
+
+{% block title %}Корзина{% endblock %}
+
+{% block content %}
+    <section>
+        <h2>Корзина заказа</h2>
+        {% if cart_items %}
+            <table>
+                <thead>
+                    <tr>
+                        <th id="cart-name">Объект</th>
+                        <th id="cart-price">Цена</th>
+                        <th id="cart-qty">Количество</th>
+                        <th id="cart-sum">Сумма</th>
+                        <th id="cart-actions">Действия</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in cart_items %}
+                        <tr>
+                            <td headers="cart-name"><a href="{% url 'realty:property-detail' item.property.slug %}">{{ item.property.title }}</a></td>
+                            <td headers="cart-price">{{ item.property.price }} BYN</td>
+                            <td headers="cart-qty">{{ item.quantity }}</td>
+                            <td headers="cart-sum">{{ item.subtotal }} BYN</td>
+                            <td headers="cart-actions">
+                                <form method="post" action="{% url 'realty:cart-update' item.property.pk %}">
+                                    {% csrf_token %}
+                                    <button type="submit" name="action" value="increase" title="Увеличить количество"><img src="{% static 'agency/img/cart-increase.svg' %}" alt="Увеличить количество"></button>
+                                    <button type="submit" name="action" value="decrease" title="Уменьшить количество"><img src="{% static 'agency/img/cart-decrease.svg' %}" alt="Уменьшить количество"></button>
+                                    <button type="submit" name="action" value="remove" title="Удалить из корзины"><img src="{% static 'agency/img/cart-remove.svg' %}" alt="Удалить из корзины"></button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    <tr>
+                        <th id="cart-total" colspan="3" scope="row">Итого</th>
+                        <td headers="cart-total">{{ cart_total }} BYN</td>
+                        <td> </td>
+                    </tr>
+                </tbody>
+            </table>
+            <p><a href="{% url 'realty:payment' %}">Оплатить</a></p>
+        {% else %}
+            <p>Корзина пуста.</p>
+        {% endif %}
+    </section>
+{% endblock %}

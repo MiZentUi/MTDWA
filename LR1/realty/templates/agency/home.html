@@ -1,16 +1,98 @@
 {% extends "agency/base.html" %}
+{% load static %}
 
 {% block title %}Главная{% endblock %}
 
 {% block content %}
     <section>
         <h2>Главная</h2>
+        <figure>
+            <img src="{% static 'agency/img/logo.jpg' %}" alt="Логотип компании" width="180">
+            <figcaption>Логотип агентства на главной странице</figcaption>
+        </figure>
+    </section>
+
+    <section>
+        <h2>Реклама компании</h2>
+        <article>
+            <h3>Баннеры</h3>
+            <ul>
+                {% for banner_image in banner_images %}
+                    <li>
+                        <figure>
+                            <img src="{% static banner_image %}" alt="Рекламный баннер {{ forloop.counter }}" width="640">
+                            <figcaption>Спецпредложение {{ forloop.counter }}</figcaption>
+                        </figure>
+                    </li>
+                {% endfor %}
+            </ul>
+        </article>
+        <article>
+            <h3>Краткий рекламный текст</h3>
+            <p><mark>realty</mark> помогает выбрать объект, проверить документы и выйти на сделку в удобные сроки.</p>
+            <blockquote>
+                <p>Надёжное агентство — это не обещания, а понятные шаги и прозрачные условия.</p>
+                <cite>Внутренний стандарт realty</cite>
+            </blockquote>
+        </article>
+    </section>
+
+    <section>
+        <h2>Каталог услуг и объектов</h2>
+        <p>Доступны услуги <strong>продажи</strong>, <strong>аренды</strong>, консультаций и подбора недвижимости.</p>
+        <ul>
+            <li>Подбор квартиры</li>
+            <li>Подбор дома</li>
+            <li>Коммерческая недвижимость</li>
+            <li>Юридическое сопровождение сделки</li>
+        </ul>
+        <section>
+            <h3>Подборка объектов</h3>
+            {% for property in featured_properties %}
+                <article itemscope itemtype="https://schema.org/Product">
+                    <h4 itemprop="name"><a href="{% url 'realty:property-detail' property.slug %}">{{ property.title }}</a></h4>
+                    <p>{{ property.city }}, {{ property.address }}</p>
+                    <p>{{ property.get_deal_kind_display }} | {{ property.property_type.name }}</p>
+                    <p><strong itemprop="offers">{{ property.price }} BYN</strong></p>
+                </article>
+            {% empty %}
+                <p>Объекты пока не добавлены.</p>
+            {% endfor %}
+        </section>
+    </section>
+
+    <section>
+        <h2>Последняя опубликованная статья</h2>
         {% if latest_article %}
-            <p><strong>Последняя опубликованная статья:</strong> {{ latest_article.title }}</p>
-            <p>{{ latest_article.summary }}</p>
-            <p><small>Дата публикации: {{ latest_article.published_at|date:"d/m/Y H:i" }}</small></p>
+            <article>
+                <h3>{{ latest_article.title }}</h3>
+                <p>{{ latest_article.summary }}</p>
+                <p><time datetime="{{ latest_article.published_at|date:'c' }}">{{ latest_article.published_at|date:"d/m/Y H:i" }}</time></p>
+                <p><a href="{% url 'realty:news-detail' latest_article.pk %}">Читать далее</a></p>
+            </article>
         {% else %}
             <p>Новости пока не опубликованы.</p>
+        {% endif %}
+    </section>
+
+    <section>
+        <h2>Компании-партнёры</h2>
+        {% if partners %}
+            <ul>
+                {% for partner in partners %}
+                    <li>
+                        <article>
+                            <h3><a href="{{ partner.website_url }}" rel="external noopener noreferrer">{{ partner.name }}</a></h3>
+                            <figure>
+                                <img src="{% static partner.logo_path %}" alt="Логотип {{ partner.name }}" width="140">
+                                <figcaption>{{ partner.description }}</figcaption>
+                            </figure>
+                        </article>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>Партнёры будут добавлены позже.</p>
         {% endif %}
     </section>
 
@@ -21,25 +103,5 @@
             <li><strong>{{ total_deals }}</strong> сделок в системе</li>
             <li><strong>{{ employee_count }}</strong> сотрудников</li>
         </ul>
-    </section>
-
-    <section>
-        <h2>Календарь и дата</h2>
-        <p>Дата для пользователя: {{ current_date_local }}</p>
-        <pre>{{ current_calendar }}</pre>
-    </section>
-
-    <section>
-        <h2>Подборка объектов</h2>
-        {% for property in featured_properties %}
-            <article>
-                <h3><a href="{% url 'realty:property-detail' property.slug %}">{{ property.title }}</a></h3>
-                <p>{{ property.city }}, {{ property.address }}</p>
-                <p>{{ property.get_deal_kind_display }} | {{ property.property_type.name }}</p>
-                <p><strong>{{ property.price }} BYN</strong></p>
-            </article>
-        {% empty %}
-            <p>Объекты пока не добавлены.</p>
-        {% endfor %}
     </section>
 {% endblock %}

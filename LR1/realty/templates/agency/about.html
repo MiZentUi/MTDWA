@@ -1,22 +1,105 @@
 {% extends "agency/base.html" %}
+{% load static %}
 
 {% block title %}О компании{% endblock %}
 
 {% block content %}
-    <section>
+<article>
+    <header>
         <h2>О компании</h2>
-        {% if company_info %}
-            <p>{{ company_info.about_text|linebreaks }}</p>
-            {% if company_info.history %}
-                <h3>История</h3>
-                <p>{{ company_info.history|linebreaks }}</p>
-            {% endif %}
-            {% if company_info.requisites %}
-                <h3>Реквизиты</h3>
-                <p>{{ company_info.requisites|linebreaks }}</p>
-            {% endif %}
-        {% else %}
-            <p>Информация о компании будет добавлена через административную панель.</p>
-        {% endif %}
+    </header>
+
+    {% if company_info %}
+    <section>
+        <h3>Информация о компании</h3>
+        {{ company_info.about_text|linebreaks }}
     </section>
+
+    <section>
+        <h3>Логотип</h3>
+        <figure>
+            <img src="{% static company_info.logo_path|default:'agency/img/logo.jpg' %}"
+                alt="Логотип компании {{ company_info.company_name }}" width="180">
+            <figcaption>{{ company_info.company_name }}</figcaption>
+        </figure>
+    </section>
+
+    <section>
+        <h3>История по годам</h3>
+        <ol>
+            {% for line in company_info.history.splitlines %}
+            <li>{{ line }}</li>
+            {% empty %}
+            <li>История будет добавлена позже.</li>
+            {% endfor %}
+        </ol>
+    </section>
+
+    <section>
+        <h3>Реквизиты</h3>
+        {{ company_info.requisites|linebreaks }}
+    </section>
+
+    <section">
+
+        <header>
+            <p><small>СЕРТИФИКАТ О ЧЛЕНСТВЕ В НАР (НАЦИОНАЛЬНАЯ АССОЦИАЦИЯ РИЭЛТОРОВ)</small></p>
+
+            <h1>ЕДИНЫЙ РЕЕСТР АГЕНТСТВ НЕДВИЖИМОСТИ</h1>
+
+            <h2>СВИДЕТЕЛЬСТВО</h2>
+
+            <h3>об аккредитации специалиста</h3>
+        </header>
+
+        <p>г. Москва <span>24 октября 2023</span></p>
+
+        <main>
+            <p><strong>Общество с ограниченной ответственностью «Реалти Групп»</strong></p>
+            <p>(ИНН 7704558921)</p>
+            <p><u>Реестровый номер: 4502</u></p>
+            <p>Действительно до: 24 октября 2024 года</p>
+        </main>
+
+        <p>
+            Иванов И.И. ___________________<br>
+            <em>Президент Ассоциации Риэлторов</em>
+        </p>
+
+        <!-- Подвал: контакты ассоциации -->
+        <footer>
+            <address>
+                Национальная Ассоциация Риэлторов<br>
+                121059, г. Москва, Кутузовский проспект, дом 12, стр. 1<br>
+                Тел. +7 (495) 123-45-67<br>
+                e-mail: info@realtors-association.ru<br>
+                сайт: www.realtors-association.ru
+            </address>
+        </footer>
+
+        </section>
+
+        <section>
+            <h3>Видео о компании</h3>
+            <iframe src="https://www.youtube.com/embed/FtutLA63Cp8" title="Видео о компании" width="560" height="315"
+                loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
+            </iframe>
+        </section>
+
+        <section>
+            <h3>Аудио информация</h3>
+            <audio controls preload="metadata">
+                <source src="{% static 'agency/media/bad_apple.mp3' %}" type="audio/mpeg">
+                Ваш браузер не поддерживает audio.
+            </audio>
+        </section>
+
+        <section>
+            <h3>Скачать документ о компании</h3>
+            <p><a href="{% static company_info.document_path %}" download>Скачать описание компании</a></p>
+        </section>
+        {% else %}
+        <p>Информация о компании будет добавлена через административную панель.</p>
+        {% endif %}
+</article>
 {% endblock %}

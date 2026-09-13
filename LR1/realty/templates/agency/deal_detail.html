@@ -3,44 +3,59 @@
 {% block title %}Сделка{% endblock %}
 
 {% block content %}
-    <section>
-        <h2>Сделка №{{ deal.pk }}</h2>
-        <p>{{ deal.property.title }}</p>
-        {% if user_profile and user_profile.is_employee %}
-            <p>
-                <a href="{% url 'realty:deal-edit' deal.pk %}">Редактировать</a>
-                <a href="{% url 'realty:deal-delete' deal.pk %}">Удалить</a>
-            </p>
-        {% endif %}
-    </section>
+    <article>
+        <header>
+            <h2>Сделка №{{ deal.pk }}</h2>
+            <p>{{ deal.property.title }}</p>
+            {% if user_profile and user_profile.is_employee %}
+                <nav aria-label="Действия со сделкой">
+                    <ul>
+                        <li><a href="{% url 'realty:deal-edit' deal.pk %}">Редактировать</a></li>
+                        <li><a href="{% url 'realty:deal-delete' deal.pk %}">Удалить</a></li>
+                    </ul>
+                </nav>
+            {% endif %}
+        </header>
 
-    <section>
-        <h3>Основные данные</h3>
-        <ul>
-            <li>Клиент: {{ deal.client.full_name }}</li>
-            <li>Менеджер: {{ deal.manager.full_name }}</li>
-            <li>Статус: {{ deal.get_status_display }}</li>
-            <li>Сумма: {{ deal.amount }} BYN</li>
-            <li>Комиссия: {{ deal.commission_percent }}%</li>
-            <li>Итого с комиссией: {{ deal.total_with_commission }} BYN</li>
-            <li>Скидка по промокоду: {{ deal.discount_amount }} BYN</li>
-        </ul>
-    </section>
-
-    <section>
-        <h3>Даты</h3>
-        <ul>
-            <li>Договор: {{ deal.agreement_date|date:"d/m/Y" }}</li>
-            <li>Закрытие: {{ deal.closing_date|date:"d/m/Y"|default:"-" }}</li>
-            <li>Создано: {{ deal.created_at|date:"d/m/Y H:i" }}</li>
-            <li>Изменено: {{ deal.updated_at|date:"d/m/Y H:i" }}</li>
-        </ul>
-    </section>
-
-    {% if deal.notes %}
         <section>
-            <h3>Примечание</h3>
-            <p>{{ deal.notes }}</p>
+            <h3>Основные данные</h3>
+            <dl>
+                <dt>Клиент</dt>
+                <dd>{{ deal.client.full_name }}</dd>
+                <dt>Менеджер</dt>
+                <dd>{{ deal.manager.full_name }}</dd>
+                <dt>Статус</dt>
+                <dd>{{ deal.get_status_display }}</dd>
+                <dt>Сумма</dt>
+                <dd>{{ deal.amount }} BYN</dd>
+                <dt>Комиссия</dt>
+                <dd>{{ deal.commission_percent }}%</dd>
+                <dt>Итого с комиссией</dt>
+                <dd>{{ deal.total_with_commission }} BYN</dd>
+                <dt>Скидка по промокоду</dt>
+                <dd>{{ deal.discount_amount }} BYN</dd>
+            </dl>
         </section>
-    {% endif %}
+
+        <section>
+            <h3>Даты</h3>
+            <dl>
+                <dt>Договор</dt>
+                <dd>{{ deal.agreement_date|date:"d/m/Y" }}</dd>
+                <dt>Закрытие</dt>
+                <dd>{{ deal.closing_date|date:"d/m/Y"|default:"-" }}</dd>
+                <dt>Создано</dt>
+                <dd>{{ deal.created_at|date:"d/m/Y H:i" }}</dd>
+                <dt>Изменено</dt>
+                <dd>{{ deal.updated_at|date:"d/m/Y H:i" }}</dd>
+            </dl>
+        </section>
+
+        {% if deal.notes %}
+            <section>
+                <h3>Примечание</h3>
+                <p>{{ deal.notes }}</p>
+            </section>
+        {% endif %}
+    </article>
 {% endblock %}

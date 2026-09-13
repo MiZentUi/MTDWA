@@ -11,6 +11,7 @@ from agency.models import (
     FAQEntry,
     NewsArticle,
     Owner,
+    PartnerCompany,
     PromoCode,
     Property,
     PropertyType,
@@ -27,6 +28,20 @@ class BaseDataMixin(TestCase):
             company_name="realty",
             slogan="Недвижимость без лишней бюрократии",
             about_text="Демо-описание компании.",
+            history="2018 — старт\n2020 — рост",
+            requisites="УНП 123456789",
+            logo_path="agency/img/logo.jpg",
+            certificate_html="<section><h3>Сертификат</h3><p>Текст сертификата.</p></section>",
+            video_url="https://www.youtube.com/embed/dQw4w9WgXcQ",
+            audio_path="agency/media/company-audio.mp3",
+            document_path="agency/docs/company-profile.txt",
+        )
+        self.partner = PartnerCompany.objects.create(
+            name="DomMarket",
+            website_url="https://example.com/dommarket",
+            logo_path="agency/img/partner-1.svg",
+            description="Партнёр по новостройкам.",
+            sort_order=1,
         )
         self.property_type = PropertyType.objects.create(name="Квартира")
         self.owner = Owner.objects.create(
@@ -107,6 +122,7 @@ class BaseDataMixin(TestCase):
             title="Рынок стабилизируется",
             summary="Краткая сводка по рынку.",
             body="Подробная аналитика рынка недвижимости.",
+            image_path="agency/img/news-1.svg",
         )
         FAQEntry.objects.create(question="Как купить квартиру?", answer="Оставьте заявку.")
         Vacancy.objects.create(title="Менеджер", description="Описание вакансии.")

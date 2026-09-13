@@ -1,103 +1,148 @@
 {% extends "agency/base.html" %}
 {% load agency_extras %}
+{% load static %}
 
 {% block title %}{{ property.title }}{% endblock %}
 
 {% block content %}
-    <section>
-        <h2>{{ property.title }}</h2>
-        <p>{{ property.city }}, {{ property.address }}</p>
-        <p>{{ property.get_deal_kind_display }} | {{ property.property_type.name }}</p>
-        {% if user.is_authenticated and user_profile and user_profile.is_employee %}
-            <p>
-                <a href="{% url 'realty:property-edit' property.slug %}">Редактировать</a>
-                <a href="{% url 'realty:property-delete' property.slug %}">Удалить</a>
-            </p>
-        {% endif %}
-    </section>
+    <article>
+        <header>
+            <h2>{{ property.title }}</h2>
+            <p>{{ property.city }}, {{ property.address }}</p>
+            <p>{{ property.get_deal_kind_display }} | {{ property.property_type.name }}</p>
+            {% if user.is_authenticated and user_profile and user_profile.is_employee %}
+                <nav aria-label="Действия с объектом">
+                    <ul>
+                        <li><a href="{% url 'realty:property-edit' property.slug %}">Редактировать</a></li>
+                        <li><a href="{% url 'realty:property-delete' property.slug %}">Удалить</a></li>
+                    </ul>
+                </nav>
+            {% endif %}
+        </header>
 
-    <section>
-        <h3>Описание</h3>
-        <p>{{ property.description }}</p>
-    </section>
+        <section>
+            <h3>Описание</h3>
+            <p>{{ property.description }}</p>
+        </section>
 
-    <section>
-        <h3>Параметры</h3>
-        <ul>
-            <li>Цена: {{ property.price }} BYN</li>
-            <li>Комнат: {{ property.rooms }}</li>
-            <li>Площадь: {{ property.area_sqm }} м²</li>
-            <li>Статус: {{ property.get_status_display }}</li>
-            <li>Владелец: {{ property.owner.full_name }}</li>
-        </ul>
-    </section>
+        <section>
+            <h3>Параметры</h3>
+            <dl>
+                <dt>Цена</dt>
+                <dd>{{ property.price }} BYN</dd>
+                <dt>Комнат</dt>
+                <dd>{{ property.rooms }}</dd>
+                <dt>Площадь</dt>
+                <dd>{{ property.area_sqm }} м²</dd>
+                <dt>Статус</dt>
+                <dd>{{ property.get_status_display }}</dd>
+                <dt>Владелец</dt>
+                <dd>{{ property.owner.full_name }}</dd>
+            </dl>
+            <form method="post" action="{% url 'realty:property-add-to-cart' property.slug %}">
+                {% csrf_token %}
+                <button type="submit" title="Добавить в корзину"><img src="{% static 'agency/img/cart-add.svg' %}" alt="Добавить в корзину"></button>
+            </form>
+            {% if in_cart %}
+                <p><small>Объект уже добавлен в корзину.</small></p>
+            {% endif %}
+        </section>
 
-    <section>
-        <h3>Даты</h3>
-        <ul>
-            <li>Создано для пользователя: {{ property.created_at|local_datetime:user_timezone }}</li>
-            <li>Создано для UTC: {{ property.created_at|utc_datetime }}</li>
-            <li>Обновлено для пользователя: {{ property.updated_at|local_datetime:user_timezone }}</li>
-            <li>Обновлено для UTC: {{ property.updated_at|utc_datetime }}</li>
-        </ul>
-    </section>
+        <section>
+            <h3>Даты</h3>
+            <dl>
+                <dt>Создано для пользователя</dt>
+                <dd>{{ property.created_at|local_datetime:user_timezone }}</dd>
+                <dt>Создано для UTC</dt>
+                <dd>{{ property.created_at|utc_datetime }}</dd>
+                <dt>Обновлено для пользователя</dt>
+                <dd>{{ property.updated_at|local_datetime:user_timezone }}</dd>
+                <dt>Обновлено для UTC</dt>
+                <dd>{{ property.updated_at|utc_datetime }}</dd>
+            </dl>
+        </section>
 
-    <section>
-        <h3>Ответственные сотрудники</h3>
-        {% for agent in property.agents.all %}
-            <p>{{ agent.full_name }}{% if agent.position %}, {{ agent.position }}{% endif %}</p>
-        {% empty %}
-            <p>Сотрудники не назначены.</p>
-        {% endfor %}
-    </section>
-
-    <section>
-        <h3>Удобства</h3>
-        {% if property.amenities.all %}
+        <section>
+            <h3>Ответственные сотрудники</h3>
             <ul>
-                {% for amenity in property.amenities.all %}
-                    <li>{{ amenity.name }}</li>
+                {% for agent in property.agents.all %}
+                    <li>{{ agent.full_name }}{% if agent.position %}, {{ agent.position }}{% endif %}</li>
+                {% empty %}
+                    <li>Сотрудники не назначены.</li>
                 {% endfor %}
             </ul>
-        {% else %}
-            <p>Удобства не указаны.</p>
-        {% endif %}
-    </section>
+        </section>
 
-    <section>
-        <h3>Внешние API</h3>
-        {% for error in api_errors %}
-            <p>{{ error }}</p>
-        {% endfor %}
         <section>
-            <h4>Геолокация</h4>
-            {% if geocode %}
-                <p>{{ geocode.display_name }}</p>
-                <p>Широта: {{ geocode.lat }}</p>
-                <p>Долгота: {{ geocode.lon }}</p>
+            <h3>Удобства</h3>
+            {% if property.amenities.all %}
+                <ul>
+                    {% for amenity in property.amenities.all %}
+                        <li>{{ amenity.name }}</li>
+                    {% endfor %}
+                </ul>
             {% else %}
-                <p>Координаты не получены.</p>
+                <p>Удобства не указаны.</p>
             {% endif %}
         </section>
+
         <section>
-            <h4>Погода</h4>
-            {% if weather %}
-                <p>Температура: {{ weather.temperature }} °C</p>
-                <p>Скорость ветра: {{ weather.wind_speed }} м/с</p>
-                <p>Время обновления: {{ weather.time }}</p>
-            {% else %}
-                <p>Погодные данные не получены.</p>
+            <h3>Внешние API</h3>
+            {% if api_errors %}
+                <section>
+                    <h4>Сообщения</h4>
+                    <ul>
+                        {% for error in api_errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                </section>
             {% endif %}
+
+            <section>
+                <h4>Геолокация</h4>
+                {% if geocode %}
+                    <dl>
+                        <dt>Адрес</dt>
+                        <dd>{{ geocode.display_name }}</dd>
+                        <dt>Широта</dt>
+                        <dd>{{ geocode.lat }}</dd>
+                        <dt>Долгота</dt>
+                        <dd>{{ geocode.lon }}</dd>
+                    </dl>
+                {% else %}
+                    <p>Координаты не получены.</p>
+                {% endif %}
+            </section>
+
+            <section>
+                <h4>Погода</h4>
+                {% if weather %}
+                    <p>Температура: {{ weather.temperature }} °C</p>
+                    <dl>
+                        <dt>Скорость ветра</dt>
+                        <dd>{{ weather.wind_speed }} м/с</dd>
+                        <dt>Время обновления</dt>
+                        <dd>{{ weather.time }}</dd>
+                    </dl>
+                {% else %}
+                    <p>Погодные данные не получены.</p>
+                {% endif %}
+            </section>
+
+            <section>
+                <h4>Пересчёт цены</h4>
+                {% if price_conversions %}
+                    <dl>
+                        {% for code, value in price_conversions.items %}
+                            <dt>{{ code }}</dt>
+                            <dd>{{ value }}</dd>
+                        {% endfor %}
+                    </dl>
+                {% else %}
+                    <p>Нет курсов для пересчёта.</p>
+                {% endif %}
+            </section>
         </section>
-        <section>
-            <h4>Пересчёт цены</h4>
-            {% if price_conversions %}
-                {% for code, value in price_conversions.items %}
-                    <p>{{ code }}: {{ value }}</p>
-                {% endfor %}
-            {% else %}
-                <p>Нет курсов для пересчёта.</p>
-            {% endif %}
-        </section>
-    </section>
+    </article>
 {% endblock %}

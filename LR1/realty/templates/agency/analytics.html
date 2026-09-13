@@ -5,20 +5,29 @@
 {% block content %}
     <section>
         <h2>Статистические показатели</h2>
-        <ul>
-            <li><strong>{{ total_amount }}</strong> общая сумма сделок</li>
-            <li><strong>{{ average_amount }}</strong> средняя сумма сделки</li>
-            <li><strong>{{ median_amount }}</strong> медиана по сумме</li>
-            <li><strong>{{ mode_amount }}</strong> мода по сумме</li>
-            <li><strong>{{ popular_type }}</strong> самый популярный вид</li>
-            <li><strong>{{ profitable_type }}</strong> самый прибыльный вид</li>
-        </ul>
+        <dl>
+            <dt>Общая сумма сделок</dt>
+            <dd>{{ total_amount }}</dd>
+            <dt>Средняя сумма сделки</dt>
+            <dd>{{ average_amount }}</dd>
+            <dt>Медиана по сумме</dt>
+            <dd>{{ median_amount }}</dd>
+            <dt>Мода по сумме</dt>
+            <dd>{{ mode_amount }}</dd>
+            <dt>Самый популярный вид</dt>
+            <dd>{{ popular_type }}</dd>
+            <dt>Самый прибыльный вид</dt>
+            <dd>{{ profitable_type }}</dd>
+        </dl>
     </section>
 
     <section>
         <h2>Диаграмма по видам недвижимости</h2>
         {% if property_type_chart_uri %}
-            <img src="{{ property_type_chart_uri|safe }}" alt="Диаграмма сделок по видам недвижимости">
+            <figure>
+                <img src="{{ property_type_chart_uri|safe }}" alt="Диаграмма сделок по видам недвижимости">
+                <figcaption>Графическое представление сделок по видам недвижимости.</figcaption>
+            </figure>
         {% else %}
             <p>Пока нет данных для диаграммы.</p>
         {% endif %}
@@ -26,21 +35,23 @@
 
     <section>
         <h2>Клиенты в алфавитном порядке</h2>
-        {% for client in alphabetical_clients %}
-            <article>
-                <p>{{ client.full_name }} | {{ client.phone }}</p>
-            </article>
-        {% empty %}
-            <p>Клиентов нет.</p>
-        {% endfor %}
+        <ul>
+            {% for client in alphabetical_clients %}
+                <li>{{ client.full_name }} | {{ client.phone }}</li>
+            {% empty %}
+                <li>Клиентов нет.</li>
+            {% endfor %}
+        </ul>
     </section>
 
     <section>
         <h2>Статусы сделок</h2>
-        {% for item in status_summary %}
-            <p>{{ item.status }}: {{ item.total }}</p>
-        {% empty %}
-            <p>Нет данных.</p>
-        {% endfor %}
+        <ul>
+            {% for item in status_summary %}
+                <li>{{ item.status }}: {{ item.total }}</li>
+            {% empty %}
+                <li>Нет данных.</li>
+            {% endfor %}
+        </ul>
     </section>
 {% endblock %}

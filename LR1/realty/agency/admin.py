@@ -7,6 +7,7 @@ from .models import (
     FAQEntry,
     NewsArticle,
     Owner,
+    PartnerCompany,
     PromoCode,
     Property,
     PropertyType,
@@ -32,6 +33,13 @@ class UserProfileAdmin(admin.ModelAdmin):
 @admin.register(CompanyInfo)
 class CompanyInfoAdmin(admin.ModelAdmin):
     list_display = ("company_name", "updated_at")
+
+
+@admin.register(PartnerCompany)
+class PartnerCompanyAdmin(admin.ModelAdmin):
+    list_display = ("name", "website_url", "sort_order")
+    search_fields = ("name", "description")
+    ordering = ("sort_order", "name")
 
 
 @admin.register(NewsArticle)

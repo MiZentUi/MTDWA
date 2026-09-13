@@ -1,4 +1,5 @@
 {% extends "agency/base.html" %}
+{% load static %}
 
 {% block title %}Новости{% endblock %}
 
@@ -7,10 +8,23 @@
         <h2>Новости</h2>
         {% for article in articles %}
             <article>
-                <h3>{{ article.title }}</h3>
+                <header>
+                    <h3>{{ article.title }}</h3>
+                    <p><time datetime="{{ article.published_at|date:'c' }}">{{ article.published_at|date:"d/m/Y H:i" }}</time></p>
+                </header>
+                {% if article.image_path %}
+                    <figure>
+                        <img src="{% static article.image_path %}" alt="Иллюстрация к статье {{ article.title }}" width="420">
+                        <figcaption>Иллюстрация новости</figcaption>
+                    </figure>
+                {% elif article.image_url %}
+                    <figure>
+                        <img src="{{ article.image_url }}" alt="Иллюстрация к статье {{ article.title }}" width="420">
+                        <figcaption>Иллюстрация новости</figcaption>
+                    </figure>
+                {% endif %}
                 <p>{{ article.summary }}</p>
-                <p><small>{{ article.body|truncatewords:35 }}</small></p>
-                <p><small>Опубликовано: {{ article.published_at|date:"d/m/Y H:i" }}</small></p>
+                <p><a href="{% url 'realty:news-detail' article.pk %}">Читать далее</a></p>
             </article>
         {% empty %}
             <p>Новостей пока нет.</p>

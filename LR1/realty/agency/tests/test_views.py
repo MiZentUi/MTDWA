@@ -13,6 +13,14 @@ class ViewTests(BaseDataMixin):
         response = self.client.get(reverse("realty:home"))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, self.article.title)
+        self.assertContains(response, "Компании-партнёры")
+        self.assertContains(response, self.partner.name)
+
+    def test_news_detail_page_loads(self):
+        response = self.client.get(reverse("realty:news-detail", args=[self.article.pk]))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, self.article.title)
+        self.assertContains(response, self.article.body)
 
     def test_property_list_filters_by_search(self):
         response = self.client.get(reverse("realty:property-list"), {"q": "Светлая"})
@@ -43,6 +51,56 @@ class ViewTests(BaseDataMixin):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Температура: 20")
         self.assertContains(response, "USD")
+        self.assertContains(response, "Добавить в корзину")
+
+    def test_add_to_cart_and_open_cart_page(self):
+        response = self.client.post(reverse("realty:property-add-to-cart", args=[self.property.slug]))
+        self.assertEqual(response.status_code, 302)
+        cart_response = self.client.get(reverse("realty:cart"))
+        self.assertEqual(cart_response.status_code, 200)
+        self.assertContains(cart_response, self.property.title)
+        self.assertContains(cart_response, "Оплатить")
+
+    def test_payment_page_accepts_valid_form(self):
+        session = self.client.session
+        session["cart"] = {str(self.property.pk): 1}
+        session.save()
+        response = self.client.post(
+            reverse("realty:payment"),
+            {
+                "full_name": "Иван Иванов",
+                "email": "buyer@example.com",
+                "phone": "+375 (29) 111-11-11",
+                "delivery_date": "2026-09-13",
+                "payment_method": "card",
+                "promo_code": "",
+                "contact_time": "10:30",
+                "need_call": "on",
+                "agree_terms": "on",
+                "comment": "Позвоните утром.",
+            },
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Оплата оформлена")
+
+    def test_about_page_contains_certificate_and_iframe(self):
+        response = self.client.get(reverse("realty:about"))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Сертификат")
+        self.assertContains(response, "Видео о компании")
+
+    def test_test_page_loads_and_shows_semantic_tags(self):
+        response = self.client.get(reverse("realty:test"))
+        self.assertEqual(response.status_code, 200)
+        for fragment in (
+            "Пример листинга",
+            "Четверостишие",
+            "Адаптивные изображения",
+            "Видео и аудио",
+            "Таблица с объединением ячеек",
+            "Глобальные атрибуты",
+        ):
+            self.assertContains(response, fragment)
 
     def test_review_create_requires_login(self):
         response = self.client.get(reverse("realty:review-add"))

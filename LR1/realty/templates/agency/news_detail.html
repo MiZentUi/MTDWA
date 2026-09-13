@@ -1,0 +1,32 @@
+{% extends "agency/base.html" %}
+{% load static %}
+
+{% block title %}{{ article.title }}{% endblock %}
+
+{% block content %}
+    <article>
+        <header>
+            <h2>{{ article.title }}</h2>
+            <p><time datetime="{{ article.published_at|date:'c' }}">{{ article.published_at|date:"d/m/Y H:i" }}</time></p>
+        </header>
+        {% if article.image_path %}
+            <figure>
+                <img src="{% static article.image_path %}" alt="Иллюстрация к новости {{ article.title }}" width="560">
+                <figcaption>{{ article.summary }}</figcaption>
+            </figure>
+        {% elif article.image_url %}
+            <figure>
+                <img src="{{ article.image_url }}" alt="Иллюстрация к новости {{ article.title }}" width="560">
+                <figcaption>{{ article.summary }}</figcaption>
+            </figure>
+        {% endif %}
+        <p><strong>{{ article.summary }}</strong></p>
+        <section>
+            <h3>Текст статьи</h3>
+            {{ article.body|linebreaks }}
+        </section>
+        <nav aria-label="Навигация по новостям">
+            <p><a href="{% url 'realty:news' %}">Вернуться к списку новостей</a></p>
+        </nav>
+    </article>
+{% endblock %}

@@ -1,3 +1,4 @@
+{% load static %}
 {% load agency_extras %}
 <!DOCTYPE html>
 <html lang="ru">
@@ -5,63 +6,102 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %}realty{% endblock %}</title>
+    <meta name="description" content="Каталог недвижимости, новости рынка, словарь терминов, вакансии и сервисы агентства realty.">
+    <meta name="keywords" content="недвижимость, купить квартиру, аренда, агентство, новости, вакансии">
+    <meta name="author" content="{{ company_info.company_name|default:'realty' }}">
+    <meta property="og:title" content="{% block og_title %}realty{% endblock %}">
+    <meta property="og:description" content="Агентство недвижимости с каталогом объектов, новостями и партнерскими программами.">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ru_RU">
+    <link rel="icon" type="image/jpeg" href="{% static 'agency/img/logo.jpg' %}">
+    <link rel="canonical" href="{{ request.build_absolute_uri }}">
+    {% block head_extra %}{% endblock %}
 </head>
-<body>
+<body itemscope itemtype="https://schema.org/RealEstateAgent">
     <header>
-        <h1>{{ company_info.company_name|default:"realty" }}</h1>
-        <p>{{ company_info.slogan|default:"Продажа и аренда объектов недвижимости" }}</p>
-
-        <nav aria-label="Основная навигация">
-            <ul>
-                <li><a href="{% url 'realty:home' %}">Главная</a></li>
-                <li><a href="{% url 'realty:about' %}">О компании</a></li>
-                <li><a href="{% url 'realty:news' %}">Новости</a></li>
-                <li><a href="{% url 'realty:faq' %}">Словарь</a></li>
-                <li><a href="{% url 'realty:contacts' %}">Контакты</a></li>
-                <li><a href="{% url 'realty:vacancies' %}">Вакансии</a></li>
-                <li><a href="{% url 'realty:reviews' %}">Отзывы</a></li>
-                <li><a href="{% url 'realty:promocodes' %}">Промокоды</a></li>
-                <li><a href="{% url 'realty:property-list' %}">Объекты</a></li>
-                <li><a href="{% url 'realty:privacy' %}">Политика</a></li>
-            </ul>
-        </nav>
-
-        <nav aria-label="Аккаунт">
-            <ul>
-                {% if user.is_authenticated %}
-                    <li><a href="{% url 'realty:dashboard' %}">Личный кабинет</a></li>
-                    <li><a href="{% url 'realty:deal-list' %}">Сделки</a></li>
-                    <li><a href="{% url 'realty:analytics' %}">Статистика</a></li>
-                    <li>
-                        <form method="post" action="{% url 'logout' %}">
-                            {% csrf_token %}
-                            <button type="submit">Выйти</button>
-                        </form>
-                    </li>
-                {% else %}
-                    <li><a href="{% url 'login' %}">Войти</a></li>
-                    <li><a href="{% url 'realty:register' %}">Регистрация</a></li>
-                {% endif %}
-            </ul>
-        </nav>
+        <figure>
+            <img src="{% static company_info.logo_path|default:'agency/img/logo.jpg' %}" alt="Логотип {{ company_info.company_name|default:'realty' }}" width="120">
+            <figcaption>Логотип компании</figcaption>
+        </figure>
+        <h1 itemprop="name">{{ company_info.company_name|default:"realty" }}</h1>
+        <p itemprop="description">{{ company_info.slogan|default:"Продажа и аренда объектов недвижимости" }}</p>
+        <p><strong>Адрес:</strong> <span itemprop="address">г. Минск, ул. Демонстрационная, 10</span></p>
+        <p><strong>Телефон:</strong> <a href="tel:+375291110000" itemprop="telephone">+375 (29) 111-00-00</a></p>
     </header>
 
+    <nav aria-label="Основная навигация">
+        <ul>
+            <li><a href="{% url 'realty:home' %}">Главная</a></li>
+            <li><a href="{% url 'realty:about' %}">О компании</a></li>
+            <li><a href="{% url 'realty:news' %}">Новости</a></li>
+            <li><a href="{% url 'realty:faq' %}">Словарь</a></li>
+            <li><a href="{% url 'realty:contacts' %}">Контакты</a></li>
+            <li><a href="{% url 'realty:vacancies' %}">Вакансии</a></li>
+            <li><a href="{% url 'realty:reviews' %}">Отзывы</a></li>
+            <li><a href="{% url 'realty:promocodes' %}">Промокоды</a></li>
+            <li><a href="{% url 'realty:property-list' %}">Объекты</a></li>
+            <li><a href="{% url 'realty:cart' %}">Корзина</a></li>
+            <li><a href="{% url 'realty:privacy' %}">Политика</a></li>
+            <li><a href="{% url 'realty:test' %}">Тест тегов</a></li>
+        </ul>
+    </nav>
+
+    <aside>
+        <nav aria-label="Быстрые разделы">
+            <ul>
+                <li><a href="#content-start">К содержимому</a></li>
+                <li><a href="#site-footer">К подвалу</a></li>
+                <li><a href="#contacts-short">К контактам</a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <nav aria-label="Аккаунт">
+        <ul>
+            {% if user.is_authenticated %}
+                <li><a href="{% url 'realty:dashboard' %}">Личный кабинет</a></li>
+                <li><a href="{% url 'realty:deal-list' %}">Сделки</a></li>
+                <li><a href="{% url 'realty:analytics' %}">Статистика</a></li>
+                <li>
+                    <form method="post" action="{% url 'logout' %}">
+                        {% csrf_token %}
+                        <button type="submit">Выйти</button>
+                    </form>
+                </li>
+            {% else %}
+                <li><a href="{% url 'login' %}">Войти</a></li>
+                <li><a href="{% url 'realty:register' %}">Регистрация</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+
     {% if messages %}
-        <section aria-label="Сообщения">
-            {% for message in messages %}
-                <p>{{ message }}</p>
-            {% endfor %}
-        </section>
+        <aside aria-label="Сообщения">
+            <h2>Сообщения</h2>
+            <ul>
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        </aside>
     {% endif %}
 
-    <main>
+    <main id="content-start">
         {% block content %}{% endblock %}
     </main>
 
-    <footer>
+    <footer id="site-footer">
+        <section id="contacts-short">
+            <h2>Контактная информация</h2>
+            <address>
+                <p>realty</p>
+                <p><a href="mailto:info@realty.example">info@realty.example</a></p>
+                <p><a href="tel:+375291110000">+375 (29) 111-00-00</a></p>
+            </address>
+        </section>
         <p>Часовой пояс пользователя: {{ user_timezone }}</p>
-        <p>Текущее время пользователя: {{ current_datetime_local|date:"d/m/Y H:i" }}</p>
-        <p>Текущее время UTC: {{ current_datetime_utc|date:"d/m/Y H:i" }}</p>
+        <p>Текущее время пользователя: <time datetime="{{ current_datetime_local|date:'c' }}">{{ current_datetime_local|date:"d/m/Y H:i" }}</time></p>
+        <p>Текущее время UTC: <time datetime="{{ current_datetime_utc|date:'c' }}">{{ current_datetime_utc|date:"d/m/Y H:i" }}</time></p>
     </footer>
 </body>
 </html>

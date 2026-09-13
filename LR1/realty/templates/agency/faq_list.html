@@ -6,13 +6,20 @@
     <section>
         <h2>Словарь терминов и понятий</h2>
         {% if entries %}
-            <dl>
-                {% for entry in entries %}
-                    <dt><strong>{{ entry.question }}</strong></dt>
-                    <dd>{{ entry.answer }}</dd>
-                    <dd><small>Добавлено: {{ entry.created_at|date:"d/m/Y H:i" }}</small></dd>
-                {% endfor %}
-            </dl>
+            <nav aria-label="Список терминов">
+                <ul>
+                    {% for entry in entries %}
+                        <li><a href="#term-{{ entry.pk }}">{{ entry.question }}</a></li>
+                    {% endfor %}
+                </ul>
+            </nav>
+            {% for entry in entries %}
+                <details id="term-{{ entry.pk }}">
+                    <summary>{{ entry.question }}</summary>
+                    <p>{{ entry.answer }}</p>
+                    <p><time datetime="{{ entry.created_at|date:'c' }}">{{ entry.created_at|date:"d/m/Y H:i" }}</time></p>
+                </details>
+            {% endfor %}
         {% else %}
             <p>Записей пока нет.</p>
         {% endif %}

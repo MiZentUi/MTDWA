@@ -6,6 +6,7 @@
     <section>
         <h2>Сделки</h2>
         <p>Список зависит от роли пользователя.</p>
+
         {% if user_profile and user_profile.is_employee %}
             <p><a href="{% url 'realty:deal-add' %}">Добавить сделку</a></p>
         {% endif %}
@@ -32,6 +33,7 @@
     </section>
 
     <section>
+        <h2>Список сделок</h2>
         <table>
             <thead>
                 <tr>

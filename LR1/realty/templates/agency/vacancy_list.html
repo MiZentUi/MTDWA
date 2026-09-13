@@ -10,13 +10,12 @@
                 <h3>{{ vacancy.title }}</h3>
                 <p>{{ vacancy.description }}</p>
                 <p>
-                    <small>Зарплата:
-                        {% if vacancy.salary_from or vacancy.salary_to %}
-                            {{ vacancy.salary_from|default:"?" }} - {{ vacancy.salary_to|default:"?" }} BYN
-                        {% else %}
-                            по договоренности
-                        {% endif %}
-                    </small>
+                    Зарплата:
+                    {% if vacancy.salary_from or vacancy.salary_to %}
+                        {{ vacancy.salary_from|default:"?" }} - {{ vacancy.salary_to|default:"?" }} BYN
+                    {% else %}
+                        по договоренности
+                    {% endif %}
                 </p>
             </article>
         {% empty %}

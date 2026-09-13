@@ -6,6 +6,7 @@
     <section>
         <h2>Каталог недвижимости</h2>
         <p>Поиск, фильтрация и сортировка по параметрам.</p>
+
         {% if user.is_authenticated and user_profile and user_profile.is_employee %}
             <p><a href="{% url 'realty:property-add' %}">Добавить объект</a></p>
         {% endif %}
@@ -64,11 +65,18 @@
         {% for property in properties %}
             <article>
                 <h3><a href="{% url 'realty:property-detail' property.slug %}">{{ property.title }}</a></h3>
-                <p>{{ property.city }}, {{ property.address }}</p>
-                <p>{{ property.property_type.name }} | {{ property.get_deal_kind_display }}</p>
-                <p>{{ property.rooms }} комн. | {{ property.area_sqm }} м²</p>
-                <p><strong>{{ property.price }} BYN</strong></p>
-                <p><small>Статус: {{ property.get_status_display }}</small></p>
+                <dl>
+                    <dt>Адрес</dt>
+                    <dd>{{ property.city }}, {{ property.address }}</dd>
+                    <dt>Вид и операция</dt>
+                    <dd>{{ property.property_type.name }} | {{ property.get_deal_kind_display }}</dd>
+                    <dt>Характеристики</dt>
+                    <dd>{{ property.rooms }} комн. | {{ property.area_sqm }} м²</dd>
+                    <dt>Цена</dt>
+                    <dd><strong>{{ property.price }} BYN</strong></dd>
+                    <dt>Статус</dt>
+                    <dd>{{ property.get_status_display }}</dd>
+                </dl>
             </article>
         {% empty %}
             <p>По выбранным параметрам ничего не найдено.</p>
@@ -77,13 +85,15 @@
 
     {% if is_paginated %}
         <nav aria-label="Постраничная навигация">
-            {% if page_obj.has_previous %}
-                <a href="?page={{ page_obj.previous_page_number }}">Назад</a>
-            {% endif %}
-            <span>Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}</span>
-            {% if page_obj.has_next %}
-                <a href="?page={{ page_obj.next_page_number }}">Вперед</a>
-            {% endif %}
+            <ul>
+                {% if page_obj.has_previous %}
+                    <li><a href="?page={{ page_obj.previous_page_number }}">Назад</a></li>
+                {% endif %}
+                <li>Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}</li>
+                {% if page_obj.has_next %}
+                    <li><a href="?page={{ page_obj.next_page_number }}">Вперед</a></li>
+                {% endif %}
+            </ul>
         </nav>
     {% endif %}
 {% endblock %}

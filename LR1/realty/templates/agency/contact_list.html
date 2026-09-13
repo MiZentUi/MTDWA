@@ -1,4 +1,5 @@
 {% extends "agency/base.html" %}
+{% load static %}
 
 {% block title %}Контакты{% endblock %}
 
@@ -8,10 +9,18 @@
         {% for employee in employees %}
             <article>
                 <h3>{{ employee.full_name }}</h3>
+                <figure>
+                    <img src="{% static 'agency/img/employee-placeholder.svg' %}" alt="Фото сотрудника {{ employee.full_name }}" width="160">
+                    <figcaption>{{ employee.position|default:"Сотрудник" }}</figcaption>
+                </figure>
                 <p><strong>{{ employee.position|default:"Сотрудник" }}</strong></p>
                 <p>{{ employee.responsibilities|default:"Консультирование клиентов и сопровождение сделок." }}</p>
-                <p>Телефон: {{ employee.phone }}</p>
-                <p>Email: {{ employee.user.email|default:"не указан" }}</p>
+                <dl>
+                    <dt>Телефон</dt>
+                    <dd>{{ employee.phone }}</dd>
+                    <dt>Email</dt>
+                    <dd>{{ employee.user.email|default:"не указан" }}</dd>
+                </dl>
             </article>
         {% empty %}
             <p>Сотрудники пока не добавлены.</p>

@@ -7,8 +7,11 @@
         <h2>Регистрация клиента</h2>
         <form method="post">
             {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit">Зарегистрироваться</button>
+            <fieldset>
+                <legend>Форма регистрации</legend>
+                {{ form.as_p }}
+            </fieldset>
+            <p><button type="submit">Зарегистрироваться</button></p>
         </form>
     </section>
 {% endblock %}

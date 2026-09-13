@@ -149,3 +149,31 @@ class ReviewForm(forms.ModelForm):
         widgets = {
             "text": forms.Textarea(attrs={"rows": 5, "maxlength": "1000"}),
         }
+
+
+class PaymentForm(forms.Form):
+    full_name = forms.CharField(max_length=255, label="ФИО плательщика")
+    email = forms.EmailField(label="Email")
+    phone = forms.RegexField(
+        regex=PHONE_PATTERN,
+        label="Телефон",
+        help_text="Формат: +375 (29) XXX-XX-XX",
+    )
+    delivery_date = forms.DateField(label="Дата оплаты", widget=DateInput())
+    payment_method = forms.ChoiceField(
+        label="Способ оплаты",
+        choices=(
+            ("card", "Банковская карта"),
+            ("invoice", "Безналичный расчёт"),
+            ("cash", "Наличный расчёт"),
+        ),
+    )
+    promo_code = forms.CharField(max_length=30, label="Промокод", required=False)
+    contact_time = forms.TimeField(label="Время для связи", required=False)
+    need_call = forms.BooleanField(label="Перезвонить для подтверждения", required=False)
+    agree_terms = forms.BooleanField(label="Согласие на обработку данных")
+    comment = forms.CharField(
+        label="Комментарий к заказу",
+        required=False,
+        widget=forms.Textarea(attrs={"rows": 4, "maxlength": "500"}),
+    )
