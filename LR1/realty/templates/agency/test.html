@@ -156,4 +156,397 @@ console.log("Итого: " + total);</code>
 Сделка скоро станет явью.</pre>
     </section>
 </article>
+
+<section>
+    <header>
+        <h2>Типовые примеры HTML-тегов и атрибутов</h2>
+    </header>
+
+    <section>
+        <h3>Глобальные атрибуты</h3>
+        <p id="demo-id" class="group demo-group" lang="ru" dir="ltr" title="Глобальные атрибуты">
+            Элемент с атрибутами <code>id</code>, <code>class</code>, <code>lang</code>, <code>dir</code> и
+            <code>title</code> (наведите курсор для подсказки).
+        </p>
+        <p dir="rtl" lang="he">שלום — текст справа налево через атрибут <code>dir="rtl"</code>.</p>
+        <p dir="auto">Текст с автоматическим определением направления <code>dir="auto"</code>.</p>
+        <p contenteditable="true" spellcheck="true" translate="yes">Этот абзац можно редактировать
+            (<code>contenteditable</code>, <code>spellcheck</code>, <code>translate</code>).</p>
+        <p hidden>Скрытый абзац с логическим атрибутом <code>hidden</code>.</p>
+        <p data-animaltype="bird" data-priority="high" data-code="DEMO-1">Пользовательские атрибуты
+            <code>data-*</code> для данных.
+        </p>
+        <p accesskey="e" tabindex="1" draggable="true" dropzone="copy">Элемент с атрибутами <code>accesskey</code>,
+            <code>tabindex</code>, <code>draggable</code> и <code>dropzone</code>.
+        </p>
+        <p style="font-weight: bold;">Текст с атрибутом <code>style</code> (inline CSS).</p>
+        <div itemscope itemtype="http://schema.org/Movie">
+            <h4 itemprop="name">Аватар</h4>
+            <span itemprop="genre">Фантастика</span>
+            <a href="trailer.html" itemprop="trailer" itemref="extra">Трейлер</a>
+            <span itemprop="director" itemscope itemtype="http://schema.org/Person">
+                Режиссёр: <span itemprop="name">Джеймс Кэмерон</span>
+            </span>
+        </div>
+    </section>
+
+    <section>
+        <h3>Атрибуты событий</h3>
+        <button type="button" onclick="alert('Клик!')" ondblclick="alert('Двойной клик!')">Кнопка с событиями
+            <code>onclick</code> и <code>ondblclick</code></button>
+    </section>
+
+    <section>
+        <h3>Семантическое и шрифтовое выделение текста</h3>
+        <p><b>Ключевые слова</b> и <em>логическое ударение</em>, <i>иностранное слово via</i>,
+            <s>неточная информация</s>, <strong>важная информация</strong>, <small>мелкий шрифт, оговорка</small>.
+        </p>
+        <p>Индексы: H<sub>2</sub>O и число 10<sup>th</sup>.</p>
+        <p><code>var x = 10;</code> — фрагмент кода, переменная <var>x</var>, результат работы
+            <samp>10</samp>, ввод пользователя <kbd>Enter</kbd>.
+        </p>
+        <p><abbr title="HyperText Markup Language">HTML</abbr> — сокращение с расшифровкой через атрибут
+            <code>title</code>.
+        </p>
+        <p><dfn title="гипертекст">Гипертекст</dfn> — термин, помеченный элементом <code>dfn</code>.</p>
+        <p>Цитата: <q cite="https://en.wikipedia.org/wiki/Apple">The apple is the pomaceous fruit of the apple
+                tree.</q> Источник: <cite>Fruit: Edible, Inedible, Incredible</cite>.</p>
+        <p>Событие в <time datetime="1984-12-7">7 декабря 1984 года</time> в
+            <time datetime="15:00">3 часа дня</time>.
+        </p>
+        <p>Выделенный фрагмент: <mark>отмеченный текст</mark> с элементом <code>mark</code>.</p>
+        <p><span class="letter">Р</span>азделение интервала текста элементом <code>span</code>.</p>
+        <p>Перенос строки:<br>вторая строка через <code>br</code>.</p>
+        <p>Длинное слово: метоксихлор<wbr>диэтиламино<wbr>метил<wbr>бутил<wbr>амино<wbr>акридин
+            с потенциальным переносом <code>wbr</code>.</p>
+    </section>
+
+    <section>
+        <h3>Ссылки и якоря</h3>
+        <p><a href="https://example.com" target="_blank" rel="nofollow" hreflang="en" type="text/html"
+                download="file.html" accesskey="l" tabindex="2" title="Пример ссылки">Ссылка с полным набором
+                атрибутов</a>.</p>
+        <p>Почтовая ссылка: <a href="mailto:usr@domain?subject=Вопрос">написать письмо</a>. Телефонная ссылка:
+            <a href="tel:+15085551212">позвонить</a>.
+        </p>
+        <p><a href="files/report.pdf" download="Отчёт.pdf">Скачать отчёт</a> через логический атрибут
+            <code>download</code>.
+        </p>
+        <p>Ссылка с альтернативным представлением: <a href="feed.xml" rel="alternate">RSS</a>. Автор:
+            <a href="about.html" rel="author">Об авторе</a>.
+        </p>
+        <p><a href="#anchor-demo">Перейти к якорю</a> внутри документа.</p>
+        <a href="https://example.com">
+            <img src="{% static 'agency/img/banner-1.svg' %}" alt="Изображение-ссылка">
+        </a>
+        <h4 id="anchor-demo">Якорь</h4>
+    </section>
+
+    <section>
+        <h3>Группировка контента</h3>
+        <div>Универсальный блочный контейнер <code>div</code>.</div>
+        <p>Абзац текста через элемент <code>p</code>.</p>
+        <pre>Предварительно
+    форматированный
+        текст с пробелами</pre>
+        <blockquote cite="https://en.wikipedia.org/wiki/Apple">The apple forms a tree that is small and deciduous,
+            reaching 3 to 12 meters tall.</blockquote>
+        <hr>
+        <ul>
+            <li>Маркированный пункт 1</li>
+            <li value="item">Маркированный пункт 2</li>
+            <li>Маркированный пункт 3</li>
+        </ul>
+        <ol start="5" reversed>
+            <li>Нумерованный пункт</li>
+            <li value="2">Пункт с заданным значением <code>value</code></li>
+            <li>Нумерованный пункт</li>
+        </ol>
+        <dl>
+            <dt>HTML-документ</dt>
+            <dd>Обычный текстовый файл, содержащий разметку.</dd>
+            <dt>Сайт</dt>
+            <dd>Набор веб-страниц, связанных ссылками и оформлением.</dd>
+        </dl>
+        <figure>
+            <figcaption>Листинг. Пример листинга в фигуре</figcaption>
+            <code>var fruits = ["apples", "oranges", "mangoes"];</code>
+        </figure>
+        <main>
+            <p>Элемент <code>main</code> для основного контента.</p>
+        </main>
+    </section>
+
+    <section>
+        <h3>Семантические секции</h3>
+        <h1>Заголовок h1</h1>
+        <h2>Заголовок h2</h2>
+        <h3>Заголовок h3</h3>
+        <h4>Заголовок h4</h4>
+        <h5>Заголовок h5</h5>
+        <h6>Заголовок h6</h6>
+        <hgroup>
+            <h1>Группа заголовков</h1>
+            <h2>Подзаголовок группы</h2>
+        </hgroup>
+        <header>
+            <p>Шапка страницы или раздела <code>header</code>.</p>
+        </header>
+        <nav>
+            <a href="index.html">Главная</a>
+            <a href="catalog.html">Каталог</a>
+            <a href="contacts.html">Контакты</a>
+        </nav>
+        <section>
+            <h3>Секция</h3>
+            <p>Общая семантическая секция <code>section</code>.</p>
+        </section>
+        <article>
+            <h3>Статья</h3>
+            <p>Законченная статья в элементе <code>article</code>.</p>
+        </article>
+        <aside>
+            <p>Боковая панель <code>aside</code> с рубриками и ссылками на архив.</p>
+        </aside>
+        <details open>
+            <summary>Детальная информация</summary>
+            <p>Разворачиваемая секция <code>details</code> с заголовком <code>summary</code>. Логический атрибут
+                <code>open</code> раскрывает секцию по умолчанию.
+            </p>
+        </details>
+        <address>
+            Автор: <a href="mailto:author@example.com">Иван Иванов</a>, город Минск.
+        </address>
+        <footer>
+            <p>Подвал страницы <code>footer</code>.</p>
+        </footer>
+    </section>
+
+    <section>
+        <h3>Таблицы</h3>
+        <table border="1">
+            <caption>Таблица с заголовком и объединением ячеек</caption>
+            <colgroup span="2">
+            </colgroup>
+            <colgroup>
+                <col span="1">
+            </colgroup>
+            <thead>
+                <tr>
+                    <th id="t-h1" scope="col">Колонка 1</th>
+                    <th id="t-h2" scope="col">Колонка 2</th>
+                    <th id="t-h3" scope="col">Колонка 3</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td rowspan="2">Ячейка (1,1) с <code>rowspan</code></td>
+                    <td headers="t-h2">Ячейка (1,2)</td>
+                    <td headers="t-h3">Ячейка (1,3)</td>
+                </tr>
+                <tr>
+                    <td colspan="2" headers="t-h2 t-h3">Ячейка (2,1) с <code>colspan</code></td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th scope="row" colspan="3">Итоговая строка <code>tfoot</code></th>
+                </tr>
+            </tfoot>
+        </table>
+        <table border="1">
+            <caption>Связывание ячеек с заголовками атрибутом headers</caption>
+            <tr>
+                <th id="rank" scope="col">Rank</th>
+                <th id="name" scope="col">Name</th>
+                <th id="color" scope="col">Color</th>
+            </tr>
+            <tr>
+                <th id="first" headers="rank" scope="row">Favorite:</th>
+                <td headers="name first">Apples</td>
+                <td headers="color first">Green</td>
+            </tr>
+            <tr>
+                <th id="second" headers="rank" scope="row">2nd Favorite:</th>
+                <td headers="name second">Oranges</td>
+                <td headers="color second">Orange</td>
+            </tr>
+        </table>
+    </section>
+
+    <section>
+        <h3>Формы и элементы управления</h3>
+        <form action="http://example.com/app/profile.php" method="post" name="main"
+            enctype="application/x-www-form-urlencoded" accept-charset="UTF-8" autocomplete="on" novalidate
+            target="_blank">
+            <fieldset title="Личная информация">
+                <legend>Личные данные</legend>
+                <label for="f-name">Имя:</label>
+                <input id="f-name" type="text" name="username" size="10" maxlength="30" placeholder="Ваше имя" required
+                    autofocus autocomplete="on">
+                <br>
+                <label for="f-pass">Пароль:</label>
+                <input id="f-pass" type="password" name="pass" maxlength="8">
+                <br>
+                <label for="f-email">Эл. почта:</label>
+                <input id="f-email" type="email" name="email" placeholder="name@example.com" required>
+                <br>
+                <label for="f-url">Веб-адрес:</label>
+                <input id="f-url" type="url" name="url">
+                <br>
+                <label for="f-tel">Телефон:</label>
+                <input id="f-tel" type="tel" name="tel" pattern="[0-9+() -]{6,}">
+                <br>
+                <label for="f-search">Поиск:</label>
+                <input id="f-search" type="search" name="search">
+                <br>
+                <label for="f-date">Дата:</label>
+                <input id="f-date" type="date" name="date" min="2020-01-01" max="2030-12-31">
+                <br>
+                <label for="f-datetime">Дата и время:</label>
+                <input id="f-datetime" type="datetime" name="dt">
+                <br>
+                <label for="f-datetime-local">Местная дата и время:</label>
+                <input id="f-datetime-local" type="datetime-local" name="dtl">
+                <br>
+                <label for="f-month">Месяц:</label>
+                <input id="f-month" type="month" name="month">
+                <br>
+                <label for="f-week">Неделя:</label>
+                <input id="f-week" type="week" name="week">
+                <br>
+                <label for="f-time">Время:</label>
+                <input id="f-time" type="time" name="time">
+                <br>
+                <label for="f-number">Число:</label>
+                <input id="f-number" type="number" name="number" min="0" max="100" step="5">
+                <br>
+                <label for="f-range">Диапазон:</label>
+                <input id="f-range" type="range" name="range" min="10" max="20" step="1">
+                <br>
+                <label for="f-color">Цвет:</label>
+                <input id="f-color" type="color" name="color">
+                <br>
+                <label for="f-file">Файл:</label>
+                <input id="f-file" type="file" name="fileinput" accept="image/jpeg,image/png,image/gif">
+                <br>
+                <input type="hidden" name="hiddenfield" value="secret">
+            </fieldset>
+            <fieldset title="Выбор">
+                <legend>Переключатели и флажки</legend>
+                <input type="radio" name="gender" value="male" checked id="g-male">
+                <label for="g-male">Мужской</label>
+                <input type="radio" name="gender" value="female" id="g-female">
+                <label for="g-female">Женский</label>
+                <br>
+                <input type="checkbox" name="vehicle" value="Bike" checked id="v-bike">
+                <label for="v-bike">У меня есть велосипед</label>
+                <input type="checkbox" name="vehicle" value="Car" id="v-car">
+                <label for="v-car">У меня есть машина</label>
+            </fieldset>
+            <fieldset title="Списки">
+                <legend>Выпадающие списки</legend>
+                <select size="4" name="s1">
+                    <option disabled>Choose a hero:</option>
+                    <option value="iron">Iron Man</option>
+                    <option selected value="captain">Captain America</option>
+                    <option value="thor">Thor</option>
+                </select>
+                <select name="s2" multiple>
+                    <optgroup label="Group 1">
+                        <option value="v2">Item G1-1</option>
+                        <option value="v3">Item G1-2</option>
+                    </optgroup>
+                    <optgroup label="Group 2" disabled>
+                        <option value="v4">Item G2-1</option>
+                        <option value="v5">Item G2-2</option>
+                    </optgroup>
+                </select>
+                <label for="f-fruit">Фрукт:</label>
+                <input id="f-fruit" list="fruitlist" name="fave">
+                <datalist id="fruitlist">
+                    <option value="Apples" label="Lovely Apples">
+                    <option value="Oranges">Refreshing Oranges</option>
+                    <option value="Cherries">
+                </datalist>
+            </fieldset>
+            <fieldset title="Многострочный текст">
+                <legend>Область textarea</legend>
+                <textarea name="desc" cols="45" rows="10" placeholder="Input description" required maxlength="450"
+                    wrap="soft" readonly>Текст внутри области.</textarea>
+            </fieldset>
+            <button type="button" name="btn">Кнопка с содержимым</button>
+            <input type="button" name="btn1" value="Простая кнопка">
+            <input type="image" name="img" src="{% static 'agency/img/cart-add.svg' %}" alt="Кнопка-изображение"
+                width="120">
+            <input type="submit" name="btn2" value="Отправить" formaction="send.php" formmethod="post"
+                formtarget="_self" formnovalidate formenctype="multipart/form-data">
+            <input type="reset" name="btn3" value="Очистить">
+        </form>
+        <input id="outside" type="text" name="external" form="main">
+    </section>
+
+    <section>
+        <h3>Изображения</h3>
+        <img src="{% static 'agency/img/logo.jpg' %}" alt="Логотип агентства" height="120" width="180"
+            longdesc="https://www.wikiwand.com/ru/HTML5">
+        <a href="map-handler.php">
+            <img src="{% static 'agency/img/employee-placeholder.svg' %}" alt="Карта" ismap>
+        </a>
+        <h4>Адаптивные изображения с srcset</h4>
+        <img src="{% static 'agency/img/banner-1.svg' %}" alt="Адаптивное изображение"
+            srcset="{% static 'agency/img/banner-1.svg' %} 1x, {% static 'agency/img/banner-2.svg' %} 2x, {% static 'agency/img/banner-3.svg' %} 3x">
+        <h4>Адаптивные изображения с srcset и sizes</h4>
+        <img src="{% static 'agency/img/news-1.svg' %}" alt="Изображение с sizes" sizes="(max-width: 40em) 100vw, 50vw"
+            srcset="{% static 'agency/img/news-1.svg' %} 600w, {% static 'agency/img/news-2.svg' %} 1000w, {% static 'agency/img/news-3.svg' %} 1400w">
+        <h4>Элемент picture с несколькими source</h4>
+        <picture>
+            <source media="(max-width: 20em)"
+                srcset="{% static 'agency/img/banner-1.svg' %} 1x, {% static 'agency/img/banner-2.svg' %} 2x">
+            <source media="(max-width: 40em)" sizes="(max-width: 30em) 100vw, 50vw"
+                srcset="{% static 'agency/img/banner-3.svg' %} 1x">
+            <img src="{% static 'agency/img/banner-1.svg' %}" alt="Баннер">
+        </picture>
+    </section>
+
+    <section>
+        <h3>Фреймы</h3>
+        <ul>
+            <li><a href="https://www.wikiwand.com/ru/HTML" target="fr">HTML</a></li>
+            <li><a href="https://www.wikiwand.com/ru/HTML5" target="fr">HTML5</a></li>
+        </ul>
+        <iframe name="fr" src="https://www.wikiwand.com/ru/HTML" width="400" height="150"
+            sandbox="allow-same-origin allow-scripts">Старый браузер не поддерживает фреймы.</iframe>
+        <iframe srcdoc="<p>Содержимое через srcdoc</p>" width="300" height="60"></iframe>
+    </section>
+
+    <section>
+        <h3>Внедрение объектов</h3>
+        <embed src="{% static 'agency/media/bad_apple.mp4' %}" type="video/mp4" width="560" height="349" hidden="false"
+            pluginspage="https://www.adobe.com/go/getflashplayer">
+        <object width="560" height="349" data="{% static 'agency/media/bad_apple.mp4' %}" type="video/mp4" name="obj1"
+            form="main">
+            <param name="allowFullScreen" value="true">
+            <b>Извините!</b> Невозможно отобразить содержимое.
+        </object>
+    </section>
+
+    <section>
+        <h3>Видео и аудио</h3>
+        <video controls width="360" height="240" src="{% static 'agency/media/bad_apple.mp4' %}" autoplay muted loop
+            preload="none" poster="{% static 'agency/img/bad_apple.png' %}">Ваш браузер не поддерживает элемент
+            video.</video>
+        <video controls width="360" height="240">
+            <source src="{% static 'agency/media/bad_apple.mp4' %}" type="video/mp4">
+            <track kind="subtitles" src="video/jane.en.vtt" srclang="en" label="English">
+            <track kind="subtitles" src="video/jane.ru.vtt" srclang="ru" label="Русский" default>
+            Ваш браузер не поддерживает элемент video.
+        </video>
+        <audio controls autoplay muted loop preload="metadata" src="{% static 'agency/media/company-audio.mp3' %}">
+            <source src="{% static 'agency/media/company-audio.mp3' %}" type="audio/mpeg">
+            <source src="{% static 'agency/media/bad_apple.mp3' %}" type="audio/mpeg">
+            Аудио не может быть воспроизведено.
+        </audio>
+    </section>
+</section>
 {% endblock %}

@@ -2,25 +2,30 @@
 {% load agency_extras %}
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %}realty{% endblock %}</title>
-    <meta name="description" content="Каталог недвижимости, новости рынка, словарь терминов, вакансии и сервисы агентства realty.">
+    <meta name="description"
+        content="Каталог недвижимости, новости рынка, словарь терминов, вакансии и сервисы агентства realty.">
     <meta name="keywords" content="недвижимость, купить квартиру, аренда, агентство, новости, вакансии">
     <meta name="author" content="{{ company_info.company_name|default:'realty' }}">
     <meta property="og:title" content="{% block og_title %}realty{% endblock %}">
-    <meta property="og:description" content="Агентство недвижимости с каталогом объектов, новостями и партнерскими программами.">
+    <meta property="og:description"
+        content="Агентство недвижимости с каталогом объектов, новостями и партнерскими программами.">
     <meta property="og:type" content="website">
     <meta property="og:locale" content="ru_RU">
     <link rel="icon" type="image/jpeg" href="{% static 'agency/img/logo.jpg' %}">
     <link rel="canonical" href="{{ request.build_absolute_uri }}">
     {% block head_extra %}{% endblock %}
 </head>
+
 <body itemscope itemtype="https://schema.org/RealEstateAgent">
     <header>
         <figure>
-            <img src="{% static company_info.logo_path|default:'agency/img/logo.jpg' %}" alt="Логотип {{ company_info.company_name|default:'realty' }}" width="120">
+            <img src="{% static company_info.logo_path|default:'agency/img/logo.jpg' %}"
+                alt="Логотип {{ company_info.company_name|default:'realty' }}" width="120">
             <figcaption>Логотип компании</figcaption>
         </figure>
         <h1 itemprop="name">{{ company_info.company_name|default:"realty" }}</h1>
@@ -59,31 +64,31 @@
     <nav aria-label="Аккаунт">
         <ul>
             {% if user.is_authenticated %}
-                <li><a href="{% url 'realty:dashboard' %}">Личный кабинет</a></li>
-                <li><a href="{% url 'realty:deal-list' %}">Сделки</a></li>
-                <li><a href="{% url 'realty:analytics' %}">Статистика</a></li>
-                <li>
-                    <form method="post" action="{% url 'logout' %}">
-                        {% csrf_token %}
-                        <button type="submit">Выйти</button>
-                    </form>
-                </li>
+            <li><a href="{% url 'realty:dashboard' %}">Личный кабинет</a></li>
+            <li><a href="{% url 'realty:deal-list' %}">Сделки</a></li>
+            <li><a href="{% url 'realty:analytics' %}">Статистика</a></li>
+            <li>
+                <form method="post" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button type="submit">Выйти</button>
+                </form>
+            </li>
             {% else %}
-                <li><a href="{% url 'login' %}">Войти</a></li>
-                <li><a href="{% url 'realty:register' %}">Регистрация</a></li>
+            <li><a href="{% url 'login' %}">Войти</a></li>
+            <li><a href="{% url 'realty:register' %}">Регистрация</a></li>
             {% endif %}
         </ul>
     </nav>
 
     {% if messages %}
-        <aside aria-label="Сообщения">
-            <h2>Сообщения</h2>
-            <ul>
-                {% for message in messages %}
-                    <li>{{ message }}</li>
-                {% endfor %}
-            </ul>
-        </aside>
+    <aside aria-label="Сообщения">
+        <h2>Сообщения</h2>
+        <ul>
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    </aside>
     {% endif %}
 
     <main id="content-start">
@@ -100,8 +105,11 @@
             </address>
         </section>
         <p>Часовой пояс пользователя: {{ user_timezone }}</p>
-        <p>Текущее время пользователя: <time datetime="{{ current_datetime_local|date:'c' }}">{{ current_datetime_local|date:"d/m/Y H:i" }}</time></p>
-        <p>Текущее время UTC: <time datetime="{{ current_datetime_utc|date:'c' }}">{{ current_datetime_utc|date:"d/m/Y H:i" }}</time></p>
+        <p>Текущее время пользователя: <time datetime="{{ current_datetime_local|date:'c' }}">{{
+                current_datetime_local|date:"d/m/Y H:i" }}</time></p>
+        <p>Текущее время UTC: <time datetime="{{ current_datetime_utc|date:'c' }}">{{ current_datetime_utc|date:"d/m/Y
+                H:i" }}</time></p>
     </footer>
 </body>
+
 </html>
