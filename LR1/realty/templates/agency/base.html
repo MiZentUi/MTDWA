@@ -17,6 +17,7 @@
     <meta property="og:type" content="website">
     <meta property="og:locale" content="ru_RU">
     <link rel="icon" type="image/jpeg" href="{% static 'agency/img/logo.jpg' %}">
+    <link rel="stylesheet" href="{% static 'agency/css/style.css' %}">
     <link rel="canonical" href="{{ request.build_absolute_uri }}">
     {% block head_extra %}{% endblock %}
 </head>
@@ -34,7 +35,7 @@
         <p><strong>Телефон:</strong> <a href="tel:+375291110000" itemprop="telephone">+375 (29) 111-00-00</a></p>
     </header>
 
-    <nav aria-label="Основная навигация">
+    <nav class="site-navigation" aria-label="Основная навигация">
         <ul>
             <li><a href="{% url 'realty:home' %}">Главная</a></li>
             <li><a href="{% url 'realty:about' %}">О компании</a></li>
@@ -61,7 +62,7 @@
         </nav>
     </aside>
 
-    <nav aria-label="Аккаунт">
+    <nav class="account-navigation" aria-label="Аккаунт">
         <ul>
             {% if user.is_authenticated %}
             <li><a href="{% url 'realty:dashboard' %}">Личный кабинет</a></li>
@@ -91,9 +92,15 @@
     </aside>
     {% endif %}
 
-    <main id="content-start">
+    <main id="content-start" class="site-content">
         {% block content %}{% endblock %}
     </main>
+
+    <section class="page-preloader" aria-label="Предзагрузчик">
+        <span></span>
+        <span></span>
+        <span></span>
+    </section>
 
     <footer id="site-footer">
         <section id="contacts-short">
@@ -105,10 +112,8 @@
             </address>
         </section>
         <p>Часовой пояс пользователя: {{ user_timezone }}</p>
-        <p>Текущее время пользователя: <time datetime="{{ current_datetime_local|date:'c' }}">{{
-                current_datetime_local|date:"d/m/Y H:i" }}</time></p>
-        <p>Текущее время UTC: <time datetime="{{ current_datetime_utc|date:'c' }}">{{ current_datetime_utc|date:"d/m/Y
-                H:i" }}</time></p>
+        <p>Текущее время пользователя: <time datetime="{{ current_datetime_local|date:'c' }}">{{ current_datetime_local|date:"d/m/Y H:i" }}</time></p>
+        <p>Текущее время UTC: <time datetime="{{ current_datetime_utc|date:'c' }}">{{ current_datetime_utc|date:"d/m/Y H:i" }}</time></p>
     </footer>
 </body>
 

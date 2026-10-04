@@ -4,7 +4,7 @@
 {% block title %}{{ article.title }}{% endblock %}
 
 {% block content %}
-    <article>
+    <article class="news-detail">
         <header>
             <h2>{{ article.title }}</h2>
             <p><time datetime="{{ article.published_at|date:'c' }}">{{ article.published_at|date:"d/m/Y H:i" }}</time></p>
