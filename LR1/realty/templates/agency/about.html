@@ -15,7 +15,7 @@
         {{ company_info.about_text|linebreaks }}
     </section>
 
-    <section>
+    <section id="about-logo">
         <h3>Логотип</h3>
         <figure>
             <img src="{% static company_info.logo_path|default:'agency/img/logo.jpg' %}"
@@ -37,10 +37,10 @@
 
     <section>
         <h3>Реквизиты</h3>
-        {{ company_info.requisites|linebreaks }}
+        <div class="requisites">{{ company_info.requisites|linebreaks }}</div>
     </section>
 
-    <section>
+    <section id="certificate">
 
         <header>
             <p><small>СЕРТИФИКАТ О ЧЛЕНСТВЕ В НАР (НАЦИОНАЛЬНАЯ АССОЦИАЦИЯ РИЭЛТОРОВ)</small></p>

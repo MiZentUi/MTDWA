@@ -82,6 +82,11 @@ h1 {
     font-kerning: normal;
 }
 
+.site-content h2 + p {
+    color: var(--dark);
+    font-weight: 600;
+}
+
 p {
     margin: 0 0 12px;
     text-indent: 20px;
@@ -240,16 +245,28 @@ blockquote {
     background: #fff5df;
 }
 
-q:lang(ru),
-blockquote:lang(ru) {
+q {
+    font-style: italic;
+    quotes: "«" "»" "„" "“";
+}
+
+q:lang(ru) {
     quotes: "«" "»";
 }
 
-q:lang(ru)::before {
+q:lang(en) {
+    quotes: "“" "”" "‘" "’";
+}
+
+q:lang(de) {
+    quotes: "„" "“";
+}
+
+q::before {
     content: open-quote;
 }
 
-q:lang(ru)::after {
+q::after {
     content: close-quote;
 }
 
@@ -429,25 +446,25 @@ q:lang(ru)::after {
     animation: slogan-show 4s infinite;
 }
 
-.home-ani~section:nth-of-type(3) {
+#catalog {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     gap: 14px;
 }
 
-.home-ani~section:nth-of-type(3)>h2,
-.home-ani~section:nth-of-type(3)>p,
-.home-ani~section:nth-of-type(3)>ul,
-.home-ani~section:nth-of-type(3)>section {
+#catalog>h2,
+#catalog>p,
+#catalog>ul,
+#catalog>section {
     grid-column: 1 / -1;
 }
 
-.home-ani~section:nth-of-type(4) article {
+#latest article {
     position: relative;
     padding-top: 34px;
 }
 
-.home-ani~section:nth-of-type(4) article::before {
+#latest article::before {
     content: "Последняя статья";
     position: absolute;
     top: 8px;
@@ -459,13 +476,13 @@ q:lang(ru)::after {
     font-size: 12px;
 }
 
-.home-ani~section:nth-of-type(5) ul {
+#partners ul {
     display: flex;
     flex-wrap: wrap;
     gap: 16px;
 }
 
-.home-ani~section:nth-of-type(5) li {
+#partners li {
     width: 190px;
     min-height: 190px;
     padding: 18px;
@@ -476,30 +493,48 @@ q:lang(ru)::after {
     box-shadow: 4px 6px 16px #0003;
 }
 
-.home-ani~section:nth-of-type(5) li::before {
+#partners li::before {
     content: none;
 }
 
-.home-ani~section:nth-of-type(5) h3 {
+#partners h3 {
     font-size: 14px;
     text-transform: none;
 }
 
-main>article>section:nth-of-type(2) img {
+#about-logo img {
     transform: rotate(-20deg) scale(1.04);
 }
 
-main>article.news-detail>section {
+#article-text {
+    position: relative;
     columns: 2 260px;
     column-gap: 28px;
+    padding: 8px 4px 16px;
+    margin: 0 0 14px;
+    text-align: justify;
+    line-height: 1.7;
+    word-spacing: .12em;
+    letter-spacing: .01em;
+    word-wrap: break-word;
+    word-break: normal;
 }
 
-main>article.news-detail>section h3 {
+#article-text h3 {
     column-span: all;
+    text-transform: uppercase;
+    letter-spacing: .06em;
 }
 
-main>article.news-detail>section p {
+#article-text p {
     break-inside: avoid;
+    margin: 0 0 14px;
+    text-indent: 24px;
+}
+
+#article-text p:first-child {
+    font-variant: small-caps;
+    font-family: Georgia, "Times New Roman", serif;
 }
 
 .news-list>article {
@@ -652,6 +687,13 @@ select:disabled {
     cursor: not-allowed;
 }
 
+input:enabled,
+textarea:enabled,
+select:enabled {
+    border-color: var(--border);
+    background: var(--white);
+}
+
 input:in-range {
     border-color: #3c9c61;
 }
@@ -707,25 +749,36 @@ tr:nth-child(even) {
     background: var(--light);
 }
 
+td:nth-child(odd),
+th:nth-child(odd) {
+    background: #f7fbfb;
+}
+
 td:empty {
     background: #eee4d5;
 }
 
-.about-certificate,
-main>article>section:nth-of-type(5) {
+.requisites {
+    font-family: Georgia, "Times New Roman", serif;
+    font-variant: small-caps;
+    letter-spacing: .02em;
+    color: var(--dark);
+}
+
+#certificate {
     position: relative;
     z-index: 1;
     padding: 28px;
     text-align: center;
-    background: linear-gradient(135deg, #fff8dc, #dceef2), url("../img/logo.jpg") center / 120px no-repeat;
+    background: linear-gradient(135deg, rgba(255, 248, 220, .55), rgba(220, 238, 242, .55)), url("../img/cert-bg.png") center / 220px repeat;
     border: 18px solid transparent;
-    border-image: url("../img/logo.jpg") 30 round;
-    -webkit-border-image: url("../img/logo.jpg") 30 round;
-    -moz-border-image: url("../img/logo.jpg") 30 round;
-    -o-border-image: url("../img/logo.jpg") 30 round;
+    border-image: url("../img/cert-border.png") 30 round;
+    -webkit-border-image: url("../img/cert-border.png") 30 round;
+    -moz-border-image: url("../img/cert-border.png") 30 round;
+    -o-border-image: url("../img/cert-border.png") 30 round;
 }
 
-.about-certificate p {
+#certificate p {
     text-indent: 0;
 }
 
@@ -890,7 +943,7 @@ footer h2 {
         display: block;
     }
 
-    main>article.news-detail>section {
+    #article-text {
         columns: 1;
     }
 
@@ -919,11 +972,11 @@ footer h2 {
         right: 72px;
     }
 
-    .home-ani~section:nth-of-type(5) ul {
+    #partners ul {
         display: block;
     }
 
-    .home-ani~section:nth-of-type(5) li {
+    #partners li {
         margin-bottom: 12px;
     }
 }
