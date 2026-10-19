@@ -101,8 +101,8 @@
                 <h3><a href="{{ partner.website_url }}" rel="external noopener noreferrer">{{ partner.name }}</a></h3>
                 <figure>
                     <img src="{% static partner.logo_path %}" alt="Логотип {{ partner.name }}" width="140">
-                    <figcaption>{{ partner.description }}</figcaption>
                 </figure>
+                <p>{{ partner.description }}</p>
             </article>
         </li>
         {% endfor %}
